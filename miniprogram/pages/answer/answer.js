@@ -11,11 +11,64 @@ Page({
     questions:[],
     allquestions:[],
     count:0, // 第几题
+    fillblankContent:'',
+    buttontext:'确定',
+    radiovalue:'',
+    checkboxvalue:null,
+    isRight:null,
+    ishidden:'hidden',
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
+  changeContent(e){
+    this.setData({
+      fillblankContent:e.detail.value
+    });
+  },
+  radiochange(e){
+    console.log(e);
+    this.setData({
+      radiovalue:e.detail.value
+    });
+  },
+  checkboxchange(e){
+    console.log(e);
+    this.setData({
+      checkboxvalue:e.detail.value
+    });
+  },
+  submit(){
+    console.log(this.data.questions[this.data.count]);
+    // console.log(this.data.radiovalue); 
+    if(this.data.buttontext=='确定'){
+      // 判断正误
+      if(this.data.questions[this.data.count].type=='choose'){
+        if(this.data.questions[this.data.count].choosenum=='1'&&this.data.questions[this.data.count].answer==this.data.radiovalue){
+          this.setData({
+            isRight:true
+          });
+        }else{
+          this.setData({
+            isRight:false,
+            ishidden:''
+          });
+        }
+      }
+      this.setData({
+        buttontext:'下一题'
+      });
+    }else{
+      this.setData({
+        buttontext:'确定',
+        count:this.data.count+1,
+        isRight:null,
+        ishidden:'hidden',
+      });
+    }
+
+  },
   onLoad: function (options) {
     easy.get().then(res=>{
       console.log(res.data);

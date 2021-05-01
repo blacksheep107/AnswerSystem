@@ -1,13 +1,38 @@
 <!--miniprogram/pages/answer/answer.wxml-->
 <view>
-  <block wx:if="{{questions.length}}>0&&{{questions.length}}>{{count}}">
-    <view wx:for="{{questions}}">
-      <button>下一题</button>
-      <view class="card">
-        <view class="question">
-          <text>{{item.content}}</text>
-        </view>
-      </view>      
+  <block wx:if="{{questions.length>0&&questions.length>count}}">
+    <button bindtap="submit">{{buttontext}}</button>
+    <view class="card">
+      <view class="question">
+        <text>{{questions[count].content}}</text>
+      </view>
+      <block wx:if="{{questions[count].type=='choose'&&questions[count].choosenum==1}}">
+        <!-- 单选 -->
+        <radio-group bindchange="radiochange">
+          <label wx:for="{{questions[count].choosecontent}}">
+            <radio value="{{item.value}}"  />
+            {{item.content}}
+          </label>
+        </radio-group>
+      </block>
+      <block wx:elif="{{questions[count].type=='choose'&&questions[count].choosenum>1}}">
+        <!-- 多选 -->
+        <checkbox-group bindchange="checkboxchange">
+          <label wx:for="{{questions[count].choosecontent}}">
+            <checkbox value="{{item.value}}" >
+              {{item.content}}
+            </checkbox>
+          </label>
+        </checkbox-group>
+      </block>
+      <block wx:elif="{{item.type=='fillblank'}}">
+        <!-- 填空 -->
+        <input value="fillblankContent" bindinput="changeContent" />
+      </block>
+      <view class="analysis" hidden="{{ishidden}}">
+        <text>正确答案：{{questions[count].answer}}</text>
+        <text>{{questions[count].analysis}}</text>
+      </view>
     </view>
   </block>
   <block wx:else>
