@@ -1,0 +1,17 @@
+<!--index.wxml-->
+<view class="contain">
+  <view class="userinfo">
+    <view class="avatar">
+      <open-data type="userAvatarUrl"></open-data>
+    </view>
+    <!-- <open-data type='userNickName' class="name"></open-data> -->
+  </view>
+  <view class="choices">
+    <view class="pk" bindtap="naviToAnswer">
+      <text>答题</text>
+    </view>
+    <view class="pk">
+      <text>PK</text>
+    </view>
+  </view>
+</view>

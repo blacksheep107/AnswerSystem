@@ -1,0 +1,16 @@
+<!--miniprogram/pages/answer/answer.wxml-->
+<view>
+  <block wx:if="{{questions.length}}>0&&{{questions.length}}>{{count}}">
+    <view wx:for="{{questions}}">
+      <button>下一题</button>
+      <view class="card">
+        <view class="question">
+          <text>{{item.content}}</text>
+        </view>
+      </view>      
+    </view>
+  </block>
+  <block wx:else>
+    <text>没有可以做的题</text>
+  </block>
+</view>

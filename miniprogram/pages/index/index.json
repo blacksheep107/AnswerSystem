@@ -1,0 +1,9 @@
+{
+  "usingComponents": {
+  },
+  "backgroundColor": "#FFFFFF",
+  "backgroundTextStyle": "light",
+  "navigationBarBackgroundColor": "#FFFFFF",
+  "navigationBarTitleText": "答题小程序",
+  "navigationBarTextStyle": "black"
+}

@@ -1,0 +1,22 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/answer/answer",
+    "pages/register/register"
+  ],
+  "window": {
+    "backgroundColor": "#FFFFFF",
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "navigationBarTitleText": "云开发 QuickStart",
+    "navigationBarTextStyle": "black"
+  },
+  "usingComponents": {
+    "wux-button": "miniprogram_npm/wux-weapp/button/index",
+    "wux-icon": "miniprogram_npm/wux-weapp/icon/index",
+    "wux-grids": "miniprogram_npm/wux-weapp/grids/index",
+    "wux-grid": "miniprogram_npm/wux-weapp/grid/index"
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2"
+}
