@@ -2,6 +2,11 @@
 const app = getApp()
 const db=wx.cloud.database();
 const users=db.collection('users');
+const pk=db.collection('pk');
+const easy=db.collection('easy_question');
+const medium=db.collection('medium_question');
+const hard=db.collection('hard_question');
+
 Page({
   data: {
     avatarUrl: './user-unlogin.png',
@@ -43,7 +48,79 @@ Page({
         });
       });
   },
-
+  createRoom(){
+    pk.add({
+      data:{
+        ownerid:app.globalData.openid,
+        status:'prepare',
+      },
+      success:res=>{
+        wx.navigateTo({
+          url: '../pkprepare/pkprepare?ownerid='+app.globalData.openid,
+        });
+      }
+    });
+  },
+  getQuestions(){
+    return new Promise((resolve)=>{
+      let all=[];
+      // pk题目随机从三个库里取，只取单选吧
+      new Promise((resolve)=>{
+        easy.where({
+          type:'choose',
+          choosenum:'1',
+        }).get().then(res=>{
+          all=all.concat(res.data);
+          resolve();
+        });      
+      }).then(()=>{
+        new Promise((resolve)=>{
+          medium.where({
+            type:'choose',
+            choosenum:'1',
+          }).get().then(res=>{
+            all=all.concat(res.data);
+            resolve();
+          });
+        }).then(()=>{
+          hard.where({
+            type:'choose',
+            choosenum:'1',
+          }).get().then(res=>{
+            all=all.concat(res.data);
+            console.log(all);
+            app.globalData.allchoosequestions=all;
+            resolve();
+          });
+        })
+      })      
+    })
+  },
+  getRandomQuestions(){
+    this.getQuestions().then(()=>{
+      // 5题
+      if(app.globalData.allchoosequestions.length<=5){
+        app.globalData.pkquestions=app.globalData.allchoosequestions;
+      }else{
+        let arr=[];
+        for(let i=0;i<5;i++){
+          let x=Math.floor(Math.random*app.globalData.allchoosequestions.length);
+          if(arr.indexOf(x)!=-1){
+            i--;
+            continue;
+          }else{
+            arr.push(x);
+            app.globalData.pkquestions.push(app.globalData.allchoosequestions[x]);
+          }
+        }
+      }
+      console.log(app.globalData.pkquestions);
+    });
+  },
+  naviTofriendPK(){
+    this.getRandomQuestions();
+    this.createRoom();
+  },
   getUserProfile() {
     // 推荐使用wx.getUserProfile获取用户信息，开发者每次通过该接口获取用户个人信息均需用户确认，开发者妥善保管用户快速填写的头像昵称，避免重复弹窗
     wx.getUserProfile({

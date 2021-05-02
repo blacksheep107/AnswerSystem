@@ -10,8 +10,8 @@
     <view class="pk" bindtap="naviToAnswer">
       <text>答题</text>
     </view>
-    <view class="pk">
-      <text>PK</text>
+    <view bindtap="naviTofriendPK" class="pk">
+      <text>好友PK</text>
     </view>
   </view>
 </view>

@@ -20,6 +20,9 @@ App({
       studentid:'',
       name:'',
       answeredquestions:[],
+      allquestions:[],
+      allchoosequestions:[],
+      pkquestions:[],
     }
   }
 })

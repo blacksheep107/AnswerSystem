@@ -25,9 +25,9 @@
           </label>
         </checkbox-group>
       </block>
-      <block wx:elif="{{item.type=='fillblank'}}">
+      <block wx:elif="{{questions[count].type=='fillblank'}}">
         <!-- 填空 -->
-        <input value="fillblankContent" bindinput="changeContent" />
+        <input value="{{fillblankContent}}" bindinput="changeContent" placeholder="答案..." />
       </block>
       <view class="analysis" hidden="{{ishidden}}">
         <text>正确答案：{{questions[count].answer}}</text>

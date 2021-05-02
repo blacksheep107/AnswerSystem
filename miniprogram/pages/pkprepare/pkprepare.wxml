@@ -1,0 +1,4 @@
+<!--miniprogram/pages/pkprepare/pkprepare.wxml-->
+<view>
+  <text>{{ownerid}}</text>
+</view>

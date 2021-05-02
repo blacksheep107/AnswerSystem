@@ -1,6 +1,8 @@
 // miniprogram/pages/answer/answer.js
 const db=wx.cloud.database();
 const easy=db.collection('easy_question');
+const medium=db.collection('medium_question');
+const hard=db.collection('hard_question');
 const app=getApp();
 Page({
 
@@ -45,9 +47,41 @@ Page({
     if(this.data.buttontext=='确定'){
       // 判断正误
       if(this.data.questions[this.data.count].type=='choose'){
-        if(this.data.questions[this.data.count].choosenum=='1'&&this.data.questions[this.data.count].answer==this.data.radiovalue){
+        if(this.data.questions[this.data.count].choosenum=='1'){
+          if(this.data.questions[this.data.count].answer==this.data.radiovalue){
+            this.setData({
+              isRight:true,
+              ishidden:'hidden'
+            });
+          }else{
+            this.setData({
+              isRight:false,
+              ishidden:''
+            });
+          }
+        }else if(this.data.questions[this.data.count].choosenum>'1'){
+          if(this.data.checkboxvalue==null){
+            this.setData({
+              isRight:false,
+              ishidden:''
+            })
+          }else if(this.data.questions[this.data.count].answer.toString()==this.data.checkboxvalue.toString()){
+            this.setData({
+              isRight:true,
+              ishidden:'hidden'
+            });
+          }else{
+            this.setData({
+              isRight:false,
+              ishidden:''
+            });
+          }
+        }
+      }else if(this.data.questions[this.data.count].type=='fillblank'){
+        if(this.data.questions[this.data.count].answer==this.data.fillblankContent){
           this.setData({
-            isRight:true
+            isRight:true,
+            ishidden:'hidden'
           });
         }else{
           this.setData({
@@ -69,24 +103,78 @@ Page({
     }
 
   },
+  getEasy(){
+    return new Promise((resol)=>{
+      easy.get().then(res=>{
+        console.log(res.data);
+        new Promise((resolve)=>{
+          res.data.forEach(item=>{
+            if(!(item._id in app.globalData.answeredquestions)){
+              // 没答过
+              console.log(item);
+              this.setData({
+                questions:this.data.questions.concat(item)
+              });
+            }
+          });
+          resolve();     
+        }).then(()=>{
+          console.log(this.data.questions);
+          resol();
+        })
+      });
+    })
+  },
+  getMedium(){
+    return new Promise((resol)=>{
+      medium.get().then(res=>{
+        console.log(res.data);
+        new Promise((resolve)=>{
+          res.data.forEach(item=>{
+            if(!(item._id in app.globalData.answeredquestions)){
+              // 没答过
+              console.log(item);
+              this.setData({
+                questions:this.data.questions.concat(item)
+              });
+            }
+          });
+          resolve();     
+        }).then(()=>{
+          console.log(this.data.questions);
+          resol();
+        })
+      });
+    })
+  },
+  getHard(){
+    return new Promise((resol)=>{
+      hard.get().then(res=>{
+        console.log(res.data);
+        new Promise((resolve)=>{
+          res.data.forEach(item=>{
+            if(!(item._id in app.globalData.answeredquestions)){
+              // 没答过
+              console.log(item);
+              this.setData({
+                questions:this.data.questions.concat(item)
+              });
+            }
+          });
+          resolve();     
+        }).then(()=>{
+          console.log(this.data.questions);
+          resol();
+        })
+      });
+    })
+  },
   onLoad: function (options) {
-    easy.get().then(res=>{
-      console.log(res.data);
-      new Promise((resolve)=>{
-        res.data.forEach(item=>{
-          if(!(item._id in app.globalData.answeredquestions)){
-            // 没答过
-            console.log(item);
-            this.setData({
-              questions:this.data.questions.concat(item)
-            });
-          }
-        });
-        resolve();     
-      }).then(()=>{
-        console.log(this.data.questions);
-      })
-    });
+    this.getEasy().then(
+      this.getMedium().then(
+        this.getHard()
+      )
+    )
   },
 
   /**
