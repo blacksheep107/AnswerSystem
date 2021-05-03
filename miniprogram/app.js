@@ -19,6 +19,7 @@ App({
       id:'',
       studentid:'',
       name:'',
+      userInfo:{},
       answeredquestions:[],
       allquestions:[],
       allchoosequestions:[],

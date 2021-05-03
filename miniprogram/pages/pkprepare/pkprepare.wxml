@@ -1,4 +1,9 @@
 <!--miniprogram/pages/pkprepare/pkprepare.wxml-->
-<view>
-  <text>{{ownerid}}</text>
+<view class="index">
+  <view class="left">
+    <image src="{{leftdata.avatarUrl}}"></image>
+  </view>
+  <view class="right"></view>
 </view>
+<button hidden="{{sbuttonhide}}" open-type="share">分享给好友</button>
+<button hidden="{{pbuttonishide}}" bindtap="getUserProfile">准备</button>

@@ -12,9 +12,7 @@ const _=db.command;
 exports.main = async (event, context) => {
   console.log('hello');
   try{
-    return await db.collection('pk').where({
-      ownerid:event.ownerid
-    }).remove({
+    return await db.collection('pk').doc(event.roomid).remove({
       success:res=>{
         console.log(res);
       },

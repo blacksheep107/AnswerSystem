@@ -7,6 +7,17 @@ const db=wx.cloud.database({
   env: 'fzuanswersystem-4gg97ebafd3efbe9'
 });
 const pk=db.collection('pk');
+const watchpk=pk.watch({
+  onChange:snapshot=>{
+    console.log(snapshot);
+    // rightdata改变，两边用户都进入
+    // 新用户进入，更新sbutton
+  },
+  onError:err=>{
+    console.error(err);
+  }
+});
+const _ = db.command;
 Page({
 
   /**
@@ -14,6 +25,16 @@ Page({
    */
   data: {
     ownerid:'',
+    pbuttonishide:'hidden',
+    sbuttonhide:'hidden',
+    leftdata:{
+      avatarUrl:'',
+      nickName:'',
+    },
+    rightdata:{
+      avatarUrl:'',
+      nickName:'',
+    },
   },
 
   /**
@@ -21,15 +42,42 @@ Page({
    */
   onLoad: function (options) {
     this.setData({
-      ownerid:options.ownerid
+      // ownerid:options.ownerid,
+      roomid:options.roomid,
     });
+    // 获取左用户头像昵称
+    pk.doc(this.data.roomid).get({
+      success:res=>{
+        console.log(res);
+        this.setData({
+          leftdata:res.data.leftdata,
+        });
+      }
+    });
+    if(options.gametype=='invite'){
+      // 获取新用户信息
+      this.setData({
+        pbuttonishide:''
+      });
+      // 更新右边用户
+      // pk.doc(this.data.roomid).update({
+      //   data:{
+      //     rightdata:{}
+      //   }
+      // })
+    }else{
+      this.setData({
+        sbuttonhide:''
+      });
+    }
   },
   onUnload:function(){
     // 用户退出，删除房间
+    watchpk.close();
     wx.cloud.callFunction({
       name:'removeRoom',
       data:{
-        ownerid:this.data.ownerid
+        roomid:this.data.roomid
       },
       success:res=>{
         console.log(res);
@@ -71,11 +119,37 @@ Page({
   onReachBottom: function () {
 
   },
-
+  getUserProfile() {
+    wx.getUserProfile({
+      desc: '展示用户信息', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
+      success: (res) => {
+        console.log(res);
+        pk.doc(this.data.roomid).update({
+          data:{
+            rightdata:{
+              avatarUrl:res.userInfo.avatarUrl,
+              nickName:res.userInfo.nickName,
+            },
+          },
+          success:res=>{
+            console.log(res);
+          }
+        });
+        // this.setData({
+        //   avatarUrl: res.userInfo.avatarUrl,
+        //   userInfo: res.userInfo,
+        //   hasUserInfo: true,
+        // })
+      }
+    })
+  },
   /**
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-
+    return{
+      title:'来和我PK吧',
+      path:'/miniprogram/pages/pkprepare/pkprepare?roomid='+this.data.roomid+'&&gametype=invite',
+    }
   }
 })
