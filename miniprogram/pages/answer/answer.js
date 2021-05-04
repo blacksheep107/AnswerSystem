@@ -99,6 +99,7 @@ Page({
         count:this.data.count+1,
         isRight:null,
         ishidden:'hidden',
+        fillblankContent:'',
       });
     }
 

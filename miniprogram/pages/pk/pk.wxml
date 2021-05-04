@@ -1,0 +1,37 @@
+<!--miniprogram/pages/pk/pk.wxml-->
+<view class="index">
+  <view class="index2">
+    <view class="left">
+      <image class="leftavatar" src="{{leftdata.avatarUrl}}"></image>
+      <text class="lefttext">{{leftdata.nickName}}</text>
+      <image src="win.png" hidden="{{leftwin}}" class="win"></image>
+      <text class="point" hidden="{{isover}}">{{leftpoint}}</text>
+    </view>
+    <view class="right">
+      <image class="rightavatar" src="{{rightdata.avatarUrl}}"></image>
+      <text class="righttext">{{rightdata.nickName}}</text>
+      <image src="win.png" hidden="{{rightwin}}" class="win"></image>
+      <text class="point" hidden="{{isover}}">{{rightpoint}}</text>
+    </view>
+    <image src="draw.png" hidden="{{draw}}" class="draw"></image>
+  </view>
+  <view class="questions">
+      <view class="question">
+        <text>{{questions[count].content}}</text>
+      </view>
+      <view class="answer">
+        <view wx:for="{{questions[count].choosecontent}}" class="chooseone">
+          <view bindtap="chooseanswer" data-value='{{item.value}}' style="background:{{item.value==answer?background:''}};">
+            <text>{{item.content}}</text>
+          </view>
+        </view>
+        <!-- <radio-group class="radiogroup" bindchange="answerchange">
+          <label class="label" wx:for="{{questions[count].choosecontent}}" style="background:{{item.value==questions[count].answer?background:''}};">
+            <radio value="{{item.value}}" checked="{{''}}"/>
+            {{item.content}}
+          </label>
+        </radio-group>
+        <button class="nextQ" bindtap="submitanswer">确定</button> -->
+      </view>
+    </view>
+</view>

@@ -32,11 +32,12 @@
     "packNpmManually": false,
     "packNpmRelationList": []
   },
-  "appid": "wxfeb8e7ad8ae25436",
+  "appid": "wx53d4c253e80f5250",
   "projectname": "AnswerSystem",
   "libVersion": "2.14.1",
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},
+  "cloudfunctionTemplateRoot": "cloudfunctionTemplate",
   "condition": {
     "search": {
       "current": -1,

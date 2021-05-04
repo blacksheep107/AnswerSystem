@@ -1,32 +1,22 @@
 // miniprogram/pages/pkprepare/pkprepare.js
 const app=getApp();
 wx.cloud.init({
-  env: 'fzuanswersystem-4gg97ebafd3efbe9'
+  env: 'fzuanswersystem-7g3gmzjw761ecfdb'
 });
 const db=wx.cloud.database({
-  env: 'fzuanswersystem-4gg97ebafd3efbe9'
+  env: 'fzuanswersystem-7g3gmzjw761ecfdb'
 });
 const pk=db.collection('pk');
-const watchpk=pk.watch({
-  onChange:snapshot=>{
-    console.log(snapshot);
-    // rightdata改变，两边用户都进入
-    // 新用户进入，更新sbutton
-  },
-  onError:err=>{
-    console.error(err);
-  }
-});
+var roomid='';
+var watchpk;
 const _ = db.command;
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
     ownerid:'',
     pbuttonishide:'hidden',
     sbuttonhide:'hidden',
+    ownerbegin:'hidden',
+    roomid:'',
     leftdata:{
       avatarUrl:'',
       nickName:'',
@@ -36,20 +26,69 @@ Page({
       nickName:'',
     },
   },
-
+  beginpk(){
+    // 开始
+    pk.doc(this.data.roomid).update({
+      data:{
+        status:'pk',
+        rightpoint:0,
+        leftpoint:0,
+      },
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    new Promise(resolve=>{
+      wx.cloud.callFunction({
+        name:'login',
+        data:{},
+        success:res=>{
+          app.globalData.openid = res.result.OPENID;
+          resolve();
+        }
+      })      
+    }).then(
+      watchpk=pk.watch({
+        onChange:snapshot=>{
+          console.log(snapshot);
+          console.log(snapshot.docChanges[0].updatedFields);
+          if(snapshot.docChanges[0].dataType=='update'&&snapshot.docChanges[0].updatedFields['rightdata.avatarUrl']!==undefined){
+            this.setData({
+              rightdata:{
+                avatarUrl:snapshot.docChanges[0].updatedFields['rightdata.avatarUrl'],
+                nickName:snapshot.docChanges[0].updatedFields['rightdata.nickName'],
+                openid:app.globalData.openid,
+              },
+              sbuttonhide:'hidden',
+            });
+            if(this.data.ownerid==app.globalData.openid){
+              this.setData({
+                ownerbegin:'',
+              });
+            }
+          }else if(snapshot.docChanges[0].dataType=='update'&&snapshot.docChanges[0].updatedFields.status=='pk'){
+            wx.navigateTo({
+              url: '../pk/pk?roomid='+roomid,
+            });
+          }
+        },
+        onError:err=>{
+          console.error(err);
+        }
+      })
+    )
+    roomid=options.roomid;
     this.setData({
-      // ownerid:options.ownerid,
       roomid:options.roomid,
     });
     // 获取左用户头像昵称
-    pk.doc(this.data.roomid).get({
+    pk.doc(options.roomid).get({
       success:res=>{
         console.log(res);
         this.setData({
+          ownerid:res.data.ownerid,
           leftdata:res.data.leftdata,
         });
       }
@@ -59,12 +98,6 @@ Page({
       this.setData({
         pbuttonishide:''
       });
-      // 更新右边用户
-      // pk.doc(this.data.roomid).update({
-      //   data:{
-      //     rightdata:{}
-      //   }
-      // })
     }else{
       this.setData({
         sbuttonhide:''
@@ -123,7 +156,11 @@ Page({
     wx.getUserProfile({
       desc: '展示用户信息', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
       success: (res) => {
-        console.log(res);
+        console.log(res.userInfo.avatarUrl);
+        let newavatar='';
+        if(res.userInfo.avatarUrl==''){
+          newavatar='https://pic1.zhimg.com/80/v2-6afa72220d29f045c15217aa6b275808_720w.jpg?source=1940ef5c';
+        }
         pk.doc(this.data.roomid).update({
           data:{
             rightdata:{
@@ -133,13 +170,11 @@ Page({
           },
           success:res=>{
             console.log(res);
+            this.setData({
+              pbuttonishide:'hidden',
+            });
           }
         });
-        // this.setData({
-        //   avatarUrl: res.userInfo.avatarUrl,
-        //   userInfo: res.userInfo,
-        //   hasUserInfo: true,
-        // })
       }
     })
   },
@@ -149,7 +184,7 @@ Page({
   onShareAppMessage: function () {
     return{
       title:'来和我PK吧',
-      path:'/miniprogram/pages/pkprepare/pkprepare?roomid='+this.data.roomid+'&&gametype=invite',
+      path:'/pages/pkprepare/pkprepare?roomid='+this.data.roomid+'&&gametype=invite',
     }
   }
 })

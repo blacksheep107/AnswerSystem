@@ -3,7 +3,8 @@
     "pages/index/index",
     "pages/answer/answer",
     "pages/register/register",
-    "pages/pkprepare/pkprepare"
+    "pages/pkprepare/pkprepare",
+    "pages/pk/pk"
   ],
   "window": {
     "backgroundColor": "#FFFFFF",

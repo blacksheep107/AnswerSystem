@@ -1,4 +1,4 @@
-/* miniprogram/pages/pkprepare/pkprepare.wxss */
+/* miniprogram/pages/pk/pk.wxss */
 .index{
   display: flex;
   flex-direction: column;
@@ -41,15 +41,29 @@
   /* padding-right: 100rpx;
   padding-top: 200rpx; */
 }
-.button{
-  z-index: 999;
-  margin-top: 100rpx;
-  margin-bottom: 100rpx;
+.radiogroup{
+  display: flex;
+  flex-direction: column;
 }
-button{
-  background: cadetblue;
+.questions{
+  align-self: center;
+  margin-top: 70rpx;
 }
-text{
+/* .answer{
   margin-top: 20rpx;
-  font-size: large;
+} */
+.label{
+  margin: 20rpx;
+}
+.win{
+  width: 280rpx;
+  height: 210rpx;
+  z-index: -100;
+  position: absolute;
+}
+.draw{
+  /* width: 280rpx;
+  height: 210rpx; */
+  z-index: -100;
+  position: absolute;
 }
