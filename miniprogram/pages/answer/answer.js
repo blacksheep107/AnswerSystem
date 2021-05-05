@@ -10,11 +10,15 @@ Page({
    * 页面的初始数据
    */
   data: {
+    loadhidden:'',
+    finhidden:'hidden',
     questions:[],
     allquestions:[],
     count:0, // 第几题
     fillblankContent:'',
+    bordercolor:'',
     buttontext:'确定',
+    isdisabled:false,
     radiovalue:'',
     checkboxvalue:null,
     isRight:null,
@@ -46,16 +50,21 @@ Page({
     // console.log(this.data.radiovalue); 
     if(this.data.buttontext=='确定'){
       // 判断正误
+      this.setData({
+        isdisabled:true
+      });
       if(this.data.questions[this.data.count].type=='choose'){
         if(this.data.questions[this.data.count].choosenum=='1'){
           if(this.data.questions[this.data.count].answer==this.data.radiovalue){
             this.setData({
               isRight:true,
+              bordercolor:'1px solid green',
               ishidden:'hidden'
             });
           }else{
             this.setData({
               isRight:false,
+              bordercolor:'1px solid red',
               ishidden:''
             });
           }
@@ -63,16 +72,19 @@ Page({
           if(this.data.checkboxvalue==null){
             this.setData({
               isRight:false,
+              bordercolor:'1px solid red',
               ishidden:''
             })
           }else if(this.data.questions[this.data.count].answer.toString()==this.data.checkboxvalue.toString()){
             this.setData({
               isRight:true,
+              bordercolor:'1px solid green',
               ishidden:'hidden'
             });
           }else{
             this.setData({
               isRight:false,
+              bordercolor:'1px solid red',
               ishidden:''
             });
           }
@@ -100,26 +112,35 @@ Page({
         isRight:null,
         ishidden:'hidden',
         fillblankContent:'',
+        isdisabled:false,
+        bordercolor:'',
       });
+      if(this.data.count==this.data.questions.length-1){
+        this.setData({
+          finhidden:''
+        });
+      }
     }
-
   },
   getEasy(){
     return new Promise((resol)=>{
       easy.get().then(res=>{
-        console.log(res.data);
         new Promise((resolve)=>{
+          let count=0;
           res.data.forEach(item=>{
             if(!(item._id in app.globalData.answeredquestions)){
-              // 没答过
-              console.log(item);
               this.setData({
                 questions:this.data.questions.concat(item)
               });
             }
+            count++;
+            if(count==res.data.length){
+              console.log(count);
+              resolve();
+            }
           });
-          resolve();     
         }).then(()=>{
+          console.log('简单题获取');
           console.log(this.data.questions);
           resol();
         })
@@ -131,17 +152,22 @@ Page({
       medium.get().then(res=>{
         console.log(res.data);
         new Promise((resolve)=>{
+          let count=0;
           res.data.forEach(item=>{
             if(!(item._id in app.globalData.answeredquestions)){
               // 没答过
-              console.log(item);
               this.setData({
                 questions:this.data.questions.concat(item)
               });
             }
+            count++;
+            if(count==res.data.length){
+              console.log(count);
+              resolve();
+            }
           });
-          resolve();     
         }).then(()=>{
+          console.log('中等题获取')
           console.log(this.data.questions);
           resol();
         })
@@ -153,17 +179,20 @@ Page({
       hard.get().then(res=>{
         console.log(res.data);
         new Promise((resolve)=>{
+          let count=0;
           res.data.forEach(item=>{
             if(!(item._id in app.globalData.answeredquestions)){
               // 没答过
-              console.log(item);
               this.setData({
                 questions:this.data.questions.concat(item)
               });
             }
+            count++;
+            if(count==res.data.length)  resolve();
           });
           resolve();     
         }).then(()=>{
+          console.log('难题获取');
           console.log(this.data.questions);
           resol();
         })
@@ -171,10 +200,14 @@ Page({
     })
   },
   onLoad: function (options) {
-    this.getEasy().then(
-      this.getMedium().then(
-        this.getHard()
-      )
+    this.getEasy().then(()=>{
+        console.log('简单！！！！！！！！！！！！！！');
+        this.getMedium().then(()=>{
+          console.log('中等！！！！！！！！！！');
+          this.getHard();
+          }
+        )      
+      }
     )
   },
 
@@ -189,7 +222,9 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    this.setData({
+      loadhidden:'hidden'
+    })
   },
 
   /**

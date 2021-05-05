@@ -50,7 +50,7 @@ Page({
         }
       })      
     }).then(
-      watchpk=pk.watch({
+      watchpk=pk.doc(options.roomid).watch({
         onChange:snapshot=>{
           console.log(snapshot);
           console.log(snapshot.docChanges[0].updatedFields);

@@ -33,6 +33,22 @@ Page({
       },
       success:res=>{
         console.log(res);
+        wx.showModal({
+          title:'提示',
+          content:'注册成功',
+          showCancel:false,
+          success:res=>{
+            console.log(res);
+            if(res.confirm){
+              wx.navigateBack({
+                delta: 0,
+              });
+            }
+          },
+          fail:res=>{
+            console.log(res);
+          }
+        });
         this.globalData.name=this.data.name;
         this.globalData.studentid=this.data.studentid;
         this.globalData.id=res._id; // 数据库索引

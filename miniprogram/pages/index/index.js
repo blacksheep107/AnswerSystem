@@ -13,6 +13,8 @@ Page({
     userInfo: {},
     hasUserInfo: false,
     logged: false,
+    name:'',
+    studentid:'',
     takeSession: false,
     requestResult: '',
     canIUseGetUserProfile: false,
@@ -44,6 +46,10 @@ Page({
             app.globalData.name=res.data[0].name;
             app.globalData.id=res.data[0]._id;
             app.globalData.answeredquestions=res.data[0].answeredquestions;
+            this.setData({
+              name:res.data[0].name,
+              studentid:res.data[0].studentid
+            });
             // 每次登陆都清空pk数据
             wx.cloud.callFunction({
               name:'removeLots',
@@ -57,6 +63,11 @@ Page({
           }
         });
       });
+      // wx.loadFontFace({
+      //   family: 'Bitstream Vera Serif Bold',
+      //   source: 'url("https://sungd.github.io/Pacifico.ttf")',
+      //   success: console.log
+      // })
   },
   createRoom(){
     console.log(app.globalData.pkquestions);
@@ -70,6 +81,7 @@ Page({
           openid:app.globalData.openid,
         },
         questions:app.globalData.pkquestions,
+        finish:0,
       },
       success:res=>{
         console.log(res);

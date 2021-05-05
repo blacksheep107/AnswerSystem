@@ -1,1 +1,38 @@
 /* miniprogram/pages/register/register.wxss */
+page{
+  background-color: #d8e3e7;
+}
+.form{
+  margin: 30rpx;
+  display: flex;
+  flex-direction: column;
+  font-size: large;
+  box-shadow: 4rpx 6rpx 34rpx #c0c0c0;
+  border-radius: 12rpx;
+  background: #f0f0f0;
+  word-break: break-all;
+  padding: 30rpx;
+  margin-top: 100rpx;
+}
+input{
+  background-color: white;
+  border-radius: 8rpx;
+  height: auto;
+}
+.line{
+  height: 1px;
+  background-color: #c0c0c0;
+  margin-top: 20rpx;
+  margin-bottom: 20rpx;
+}
+.info{
+  display: flex;
+  flex-direction: row;
+  margin-top: 40rpx;
+  margin-bottom: 40rpx;
+  justify-content: center;
+}
+.button{
+  background: #1687a7;
+  color: white;
+}

@@ -4,7 +4,7 @@ const db=wx.cloud.database();
 const pk=db.collection('pk');
 const _ = db.command;
 const addPoint=20; // 回答正确加20
-
+var watchpoint;
 Page({
   /**
    * 页面的初始数据
@@ -20,7 +20,8 @@ Page({
     background:'',
     leftpoint:0,
     rightpoint:0,
-    isover:'hidden',
+    isover:'',
+    loadhidden:'hidden',
     leftisTrue:'hidden',
     rightisTrue:'hidden',
     leftisFalse:'hidden',
@@ -57,8 +58,8 @@ Page({
           success:res=>{
             this.setData({
               leftisTrue:'', // 显示正确
-              background:'green',
-              leftpoint:this.data.leftpoint,
+              background:'1px solid green',
+              leftpoint:this.data.leftpoint+addPoint,
             });
           }
         })
@@ -70,8 +71,8 @@ Page({
           success:res=>{
             this.setData({
               rightisTrue:'', // 显示正确
-              background:'green',
-              rightpoint:this.data.rightpoint,
+              background:'1px solid green',
+              rightpoint:this.data.rightpoint+addPoint,
             });
           }
         })
@@ -81,12 +82,12 @@ Page({
       if(answer==this.data.questions[this.data.count].answer){
         this.setData({
           leftisFalse:'',
-          background:'red',
+          background:'1px solid red',
         });
       }else{
         this.setData({
           rightisFalse:'',
-          background:'red',
+          background:'1px solid red',
         });
       }
     }
@@ -102,9 +103,13 @@ Page({
         background:'',
       });
     },2000);
-    if(this.data.count==this.data.questions.length){
+    if(this.data.count==this.data.questions.length-1){
+      this.setData({
+        loadhidden:'',
+        isover:'hidden',
+      });
       // 结算
-      calPoints();
+      this.calPoints();
     }
 
   },
@@ -125,7 +130,7 @@ Page({
           success:res=>{
             this.setData({
               leftisTrue:'', // 显示正确
-              background:'green',
+              background:'1px solid green',
             });
           }
         })
@@ -137,7 +142,7 @@ Page({
           success:res=>{
             this.setData({
               rightisTrue:'', // 显示正确
-              background:'green',
+              background:'1px solid green',
             });
           }
         })
@@ -147,16 +152,37 @@ Page({
       if(answer==this.data.questions[this.data.count].answer){
         this.setData({
           leftisFalse:'',
-          background:'red',
+          background:'1px solid red',
         });
       }else{
         this.setData({
           rightisFalse:'',
-          background:'red',
+          background:'1px solid red',
         });
       }
     }
     var that=this;
+    if(this.data.count==this.data.questions.length-1){
+      that.setData({
+        rightisTrue:'hidden',
+        rightisFalse:'hidden',
+        leftisFalse:'hidden',
+        leftisTrue:'hidden',
+        count:that.data.count+1,
+        answer:'',
+        background:'',
+        loadhidden:'',
+        isover:'hidden',
+      });
+      pk.doc(this.data.roomid).update({
+        data:{
+          finish:_.inc(1)
+        },
+        success:res=>{
+          console.log(res);
+        }
+      })
+    }
     setTimeout(function(){
       that.setData({
         rightisTrue:'hidden',
@@ -168,23 +194,20 @@ Page({
         background:'',
       });
     },2000);
-    if(this.data.count==this.data.questions.length){
-      // 结算
-      calPoints();
-    }
+    console.log(this.data.count);
   },
   calPoints(){
     let leftpoint=this.data.leftpoint;
     let rightpoint=this.data.rightpoint;
     if(leftpoint>rightpoint){
-      showLeftWin();
+      this.showLeftWin();
     }else if(leftpoint<rightpoint){
-      showRightWin();
+      this.showRightWin();
     }else{
-      showDraw();
+      this.showDraw();
     }    
     this.setData({
-      isover:''
+      loadhidden:'hidden'
     });
   },
   showLeftWin(){
@@ -207,6 +230,27 @@ Page({
     return new Promise(resolve=>setTimeout(callback,time));
   },
   onLoad: function (options) {
+    watchpoint=pk.doc(options.roomid).watch({
+      onChange:snapshot=>{
+        console.log(snapshot);
+        if(snapshot.docChanges[0].dataType=='update'&&snapshot.docChanges[0].updatedFields.leftpoint!==undefined){
+          this.setData({
+            leftpoint:snapshot.docChanges[0].updatedFields.leftpoint
+          });
+        }
+        if(snapshot.docChanges[0].dataType=='update'&&snapshot.docChanges[0].updatedFields.rightpoint!==undefined){
+          this.setData({
+            rightpoint:snapshot.docChanges[0].updatedFields.rightpoint
+          });
+        }
+        if(snapshot.docChanges[0].dataType=='update'&&snapshot.docChanges[0].updatedFields.finish==2){
+          this.calPoints();
+        }
+      },
+      onError:err=>{
+        console.error(err);
+      }
+    })
     pk.doc(options.roomid).get({
       success:res=>{
         console.log(res);

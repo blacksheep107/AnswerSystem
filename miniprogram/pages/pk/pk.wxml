@@ -1,27 +1,28 @@
 <!--miniprogram/pages/pk/pk.wxml-->
+<loading hidden="{{loadhidden}}">结算中</loading>
 <view class="index">
   <view class="index2">
     <view class="left">
       <image class="leftavatar" src="{{leftdata.avatarUrl}}"></image>
       <text class="lefttext">{{leftdata.nickName}}</text>
       <image src="win.png" hidden="{{leftwin}}" class="win"></image>
-      <text class="point" hidden="{{isover}}">{{leftpoint}}</text>
+      <text class="point" >{{leftpoint}}</text>
     </view>
     <view class="right">
       <image class="rightavatar" src="{{rightdata.avatarUrl}}"></image>
       <text class="righttext">{{rightdata.nickName}}</text>
       <image src="win.png" hidden="{{rightwin}}" class="win"></image>
-      <text class="point" hidden="{{isover}}">{{rightpoint}}</text>
+      <text class="point">{{rightpoint}}</text>
     </view>
     <image src="draw.png" hidden="{{draw}}" class="draw"></image>
   </view>
-  <view class="questions">
+  <view class="questions" hidden="{{isover}}">
       <view class="question">
         <text>{{questions[count].content}}</text>
       </view>
       <view class="answer">
-        <view wx:for="{{questions[count].choosecontent}}" class="chooseone">
-          <view bindtap="chooseanswer" data-value='{{item.value}}' style="background:{{item.value==answer?background:''}};">
+        <view wx:for="{{questions[count].choosecontent}}" class="chooseone" style="border:{{item.value==answer?background:''}};">
+          <view bindtap="chooseanswer" data-value='{{item.value}}'>
             <text>{{item.content}}</text>
           </view>
         </view>
@@ -34,4 +35,8 @@
         <button class="nextQ" bindtap="submitanswer">确定</button> -->
       </view>
     </view>
+</view>
+<view class="back">
+  <view class="blue"></view>
+  <view class="pink"></view>  
 </view>

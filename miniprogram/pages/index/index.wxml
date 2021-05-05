@@ -4,14 +4,18 @@
     <view class="avatar">
       <open-data type="userAvatarUrl"></open-data>
     </view>
+    <view class="student">
+      <text>{{name}}</text>
+      <text>{{studentid}}</text>
+    </view>
     <!-- <open-data type='userNickName' class="name"></open-data> -->
   </view>
   <view class="choices">
     <view class="pk" bindtap="naviToAnswer">
-      <text>答题</text>
+      <text class="text">答题</text>
     </view>
     <view bindtap="getUserProfile" class="pk">
-      <text>好友PK</text>
+      <text class="text">好友PK</text>
     </view>
   </view>
 </view>

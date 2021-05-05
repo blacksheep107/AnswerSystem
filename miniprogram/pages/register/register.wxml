@@ -1,10 +1,16 @@
 <!--miniprogram/pages/register/register.wxml-->
 <view>
-  <form>
-    <label for="studentid">学号：</label>
-    <input value="{{studentid}}" id="studentid" bindinput="studentidinput"/>
-    <label for='name'>姓名：</label>
-    <input value="{{name}}" bindinput="nameinput" id='name' />
-    <button bindtap="registerClick">注册</button>
+  <form class="form">
+    <view class="info">
+      <label for="studentid">学号：</label>
+      <input value="{{studentid}}" id="studentid" bindinput="studentidinput"/>      
+    </view>
+    <view class="line"></view>
+    <view class="info">
+      <label for='name'>姓名：</label>
+      <input value="{{name}}" bindinput="nameinput" id='name' />      
+    </view>
+    <view class="line"></view>
+    <button bindtap="registerClick" class="button">注册</button>
   </form>
 </view>

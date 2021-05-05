@@ -1,4 +1,5 @@
 <!--miniprogram/pages/pkprepare/pkprepare.wxml-->
+
 <view class="index">
   <view class="index2">
     <view class="left">
@@ -15,5 +16,9 @@
     <button hidden="{{pbuttonishide}}" bindtap="getUserProfile">准备</button>
     <button hidden="{{ownerbegin}}" bindtap="beginpk">开始PK</button>      
   </view>
+</view>
+<view class="back">
+  <view class="blue"></view>
+  <view class="pink"></view>  
 </view>
 

@@ -1,5 +1,5 @@
 page{
-  background-color: #ffffff;
+  background-color: #d8e3e7;
 }
 .contain{
   display: flex;
@@ -7,16 +7,19 @@ page{
 }
 .userinfo{
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
+  background-color: #d8e3e7;
+  margin-bottom: 80rpx;
+  border: none;
   /* margin-right: auto;
   margin-left: 20rpx;   */
 }
 .avatar{
   border-radius: 50%;
   /* margin: 20rpx; */
-  height: 120rpx;
-  width: 120rpx;
+  height: 130rpx;
+  width: 130rpx;
   justify-self: center;
   align-self: center;
   overflow: hidden;
@@ -32,10 +35,28 @@ page{
   /* justify-content: center;
   align-content: center; */
 }
-
 .pk{
-  border-radius: 6rpx;
-  min-height: 100rpx;
-  border: 1px solid #de8971;
-  margin: 12rpx;
+  border-radius: 16rpx;
+  min-height: 120rpx;
+  border: 1px solid #28527a;
+  margin: 50rpx;
+  text-align: center;
+  font-weight: bold;
+  font-size: x-large;
+  color: #126e82;
+  background-color: #9dbeb9;
+  box-shadow: 26rpx 28rpx 20rpx #c0c0c0;
+  /* font-family: Bitstream Vera Serif Bold; */
+}
+.text{
+  height: 100rpx;
+  line-height: 100rpx;
+}
+.student{
+  height: 20rpx;
+  font-size: large;
+  color: gray;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
 }

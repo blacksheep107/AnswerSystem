@@ -1,25 +1,29 @@
 <!--miniprogram/pages/answer/answer.wxml-->
-<view>
+<loading hidden="{{loadhidden}}">加载题目中</loading>
+<view class="index">
   <block wx:if="{{questions.length>0&&questions.length>count}}">
-    <button bindtap="submit">{{buttontext}}</button>
+    <view class="buttonview">
+      <button bindtap="submit" class="button">{{buttontext}}</button>
+    </view>
     <view class="card">
       <view class="question">
         <text>{{questions[count].content}}</text>
       </view>
+      <view class="line"></view>
       <block wx:if="{{questions[count].type=='choose'&&questions[count].choosenum==1}}">
         <!-- 单选 -->
-        <radio-group bindchange="radiochange">
-          <label wx:for="{{questions[count].choosecontent}}">
-            <radio value="{{item.value}}"  />
+        <radio-group bindchange="radiochange" class="group">
+          <label wx:for="{{questions[count].choosecontent}}" class="label" style="border:{{radiovalue==item.value?bordercolor:''}};">
+            <radio value="{{item.value}}" disabled="{{isdisabled}}" />
             {{item.content}}
           </label>
         </radio-group>
       </block>
       <block wx:elif="{{questions[count].type=='choose'&&questions[count].choosenum>1}}">
         <!-- 多选 -->
-        <checkbox-group bindchange="checkboxchange">
-          <label wx:for="{{questions[count].choosecontent}}">
-            <checkbox value="{{item.value}}" >
+        <checkbox-group bindchange="checkboxchange" class="group">
+          <label wx:for="{{questions[count].choosecontent}}" class="label">
+            <checkbox value="{{item.value}}" disabled="{{isdisabled}}" >
               {{item.content}}
             </checkbox>
           </label>
@@ -27,15 +31,18 @@
       </block>
       <block wx:elif="{{questions[count].type=='fillblank'}}">
         <!-- 填空 -->
-        <input value="{{fillblankContent}}" bindinput="changeContent" placeholder="答案..." />
+        <input value="{{fillblankContent}}" bindinput="changeContent" focus="{{true}}" placeholder="填写答案..." />
       </block>
-      <view class="analysis" hidden="{{ishidden}}">
-        <text>正确答案：{{questions[count].answer}}</text>
-        <text>{{questions[count].analysis}}</text>
-      </view>
+    </view>
+    <view class="card" hidden="{{ishidden}}">
+      <text class="answer">正确答案：{{questions[count].answer}}</text>
+      <text class="analysis">{{questions[count].analysis}}</text>
     </view>
   </block>
   <block wx:else>
-    <text>没有可以做的题</text>
+    <view class="finish" hidden="{{finhidden}}">
+      <image src="finish.png" class="img"></image>
+      <text class="fintext">你已经完成了所有题目！</text>
+    </view>
   </block>
 </view>

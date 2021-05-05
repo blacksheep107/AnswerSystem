@@ -1,1 +1,77 @@
 /* miniprogram/pages/answer/answer.wxss */
+page{
+  background-color: #d8e3e7;
+}
+button{
+  margin: 0;
+  padding: 0;
+}
+.index{
+  display: flex;
+  flex-direction: column;
+}
+.buttonview{
+  margin-left: auto;
+  margin-bottom: 20rpx;
+  padding-right: 28rpx;
+}
+.button{
+  border-radius: 12rpx;
+  background: #a0937d;
+  color: white;
+  width: 200rpx;
+  padding: 16rpx;
+  max-width: 200rpx;
+  /* min-width: fit-content; */
+  float: right;
+  padding: 16rpx;
+  padding-left: 40rpx;
+  padding-right: 40rpx;
+}
+.card{
+  display: flex;
+  flex-direction: column;
+  border-radius: 12rpx;
+  margin: 30rpx;
+  padding: 30rpx;
+  background: #f0f0f0;
+  font-size: large;
+  box-shadow: 4rpx 6rpx 34rpx #c0c0c0;
+  word-break: break-all;
+}
+.line{
+  height: 1px;
+  background-color: #c0c0c0;
+  margin-top: 20rpx;
+  margin-bottom: 20rpx;
+}
+.group{
+  display: flex;
+  flex-direction: column;
+}
+.label{
+  margin: 20rpx;
+  background-color: #dddddd;
+  border-radius: 16rpx;
+  padding: 20rpx;
+}
+.answer{
+  font-weight: bold;
+  margin-bottom: 10rpx;
+}
+.finish{
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
+}
+.img{
+  margin: 80rpx;
+  height: 300rpx;
+  width: 300rpx;
+}
+.fintext{
+  font-weight: bold;
+    font-size: x-large;
+    color: cadetblue;
+}
