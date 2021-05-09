@@ -1,0 +1,11 @@
+<!--miniprogram/pages/record/record.wxml-->
+<view class="index">
+  <block wx:if="{{questions.length===0}}">
+    <text class="noanswer">你还没有答过题！</text>
+  </block>
+  <block wx:else>
+    <view wx:for="questions">
+      
+    </view>  
+  </block>
+</view>

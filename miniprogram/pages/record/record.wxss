@@ -1,0 +1,13 @@
+/* miniprogram/pages/record/record.wxss */
+page{
+  background-color: #d8e3e7;
+}
+.index{
+  display: flex;
+  flex-direction: column;
+}
+.noanswer{
+  justify-self: center;
+  align-self: center;
+  font-size: large;
+}

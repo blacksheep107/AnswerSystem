@@ -46,6 +46,9 @@ Page({
             app.globalData.name=res.data[0].name;
             app.globalData.id=res.data[0]._id;
             app.globalData.answeredquestions=res.data[0].answeredquestions;
+            for(let i=0;i<app.globalData.answeredquestions.length;i++){
+              app.globalData.answerid.push(app.globalData.answeredquestions[i]._id);
+            }
             this.setData({
               name:res.data[0].name,
               studentid:res.data[0].studentid
@@ -68,6 +71,11 @@ Page({
       //   source: 'url("https://sungd.github.io/Pacifico.ttf")',
       //   success: console.log
       // })
+  },
+  naviToRecord(){
+    wx.navigateTo({
+      url: '../record/record',
+    });
   },
   createRoom(){
     console.log(app.globalData.pkquestions);

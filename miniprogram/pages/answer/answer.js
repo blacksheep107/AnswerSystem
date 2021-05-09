@@ -3,7 +3,9 @@ const db=wx.cloud.database();
 const easy=db.collection('easy_question');
 const medium=db.collection('medium_question');
 const hard=db.collection('hard_question');
+const users=db.collection('users');
 const app=getApp();
+const _=db.command;
 Page({
 
   /**
@@ -23,6 +25,7 @@ Page({
     checkboxvalue:null,
     isRight:null,
     ishidden:'hidden',
+    myanswer:'',
   },
 
   /**
@@ -47,19 +50,21 @@ Page({
   },
   submit(){
     console.log(this.data.questions[this.data.count]);
-    // console.log(this.data.radiovalue); 
     if(this.data.buttontext=='确定'){
       // 判断正误
       this.setData({
-        isdisabled:true
+        isdisabled:true,
       });
       if(this.data.questions[this.data.count].type=='choose'){
         if(this.data.questions[this.data.count].choosenum=='1'){
+          this.setData({
+            myanswer:this.data.radiovalue
+          });
           if(this.data.questions[this.data.count].answer==this.data.radiovalue){
             this.setData({
               isRight:true,
               bordercolor:'1px solid green',
-              ishidden:'hidden'
+              ishidden:'hidden',
             });
           }else{
             this.setData({
@@ -69,6 +74,9 @@ Page({
             });
           }
         }else if(this.data.questions[this.data.count].choosenum>'1'){
+          this.setData({
+            myanswer:this.data.checkboxvalue
+          });
           if(this.data.checkboxvalue==null){
             this.setData({
               isRight:false,
@@ -90,6 +98,9 @@ Page({
           }
         }
       }else if(this.data.questions[this.data.count].type=='fillblank'){
+        this.setData({
+          myanswer:this.data.fillblankContent
+        });
         if(this.data.questions[this.data.count].answer==this.data.fillblankContent){
           this.setData({
             isRight:true,
@@ -105,6 +116,15 @@ Page({
       this.setData({
         buttontext:'下一题'
       });
+      users.doc(app.globalData.id).update({
+        data:{
+          answeredquestions:_.push({
+            question:this.data.questions[this.data.count],
+            isRight:this.data.isRight,
+            myanswer:this.data.answer
+          })
+        }
+      })
     }else{
       this.setData({
         buttontext:'确定',
@@ -204,7 +224,32 @@ Page({
         console.log('简单！！！！！！！！！！！！！！');
         this.getMedium().then(()=>{
           console.log('中等！！！！！！！！！！');
-          this.getHard();
+          this.getHard().then(()=>{
+            // 去重
+            let temp=[];
+            // console.log(app.globalData.answerid);
+            this.setData({
+              questions:this.data.questions.filter((item)=>{
+                // console.log(item);
+                // console.log(app.globalData.answerid.indexOf(item));
+                return app.globalData.answerid.indexOf(item._id)==-1;
+              })
+            })
+            // this.data.questions.filter((item)=>{
+            //   return app.globalData.answerid.indexOf(item)==-1;
+            // })
+            // console.log(this.data.questions);
+            // for(let i=0;i<this.data.questions.length;i++){
+            //   console.log(this.data.questions[i]._id);
+            //   if(!(this.data.questions[i]._id in app.globalData.answerid)){
+            //     temp.push(this.data.questions[i]);
+            //   }else{
+            //     console.log(1);
+            //   }
+            // }
+            // this.data.questions=temp;
+            // console.log(this.data.questions);
+          })
           }
         )      
       }

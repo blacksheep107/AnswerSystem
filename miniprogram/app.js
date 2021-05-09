@@ -24,6 +24,7 @@ App({
       allquestions:[],
       allchoosequestions:[],
       pkquestions:[],
+      answerid:[],
     }
   }
 })

@@ -17,5 +17,8 @@
     <view bindtap="getUserProfile" class="pk">
       <text class="text">好友PK</text>
     </view>
+    <view bindtap="naviToRecord" class="pk">
+      <text class="text">答题记录</text>
+    </view>
   </view>
 </view>
