@@ -14,6 +14,7 @@ Page({
   data: {
     loadhidden:'',
     finhidden:'hidden',
+    allhihdden:'hidden',
     questions:[],
     allquestions:[],
     count:0, // 第几题
@@ -121,7 +122,7 @@ Page({
           answeredquestions:_.push({
             question:this.data.questions[this.data.count],
             isRight:this.data.isRight,
-            myanswer:this.data.answer
+            myanswer:this.data.myanswer
           })
         }
       })
@@ -219,7 +220,10 @@ Page({
       });
     })
   },
-  onLoad: function (options) {
+  onReady: function (options) {
+    this.setData({
+      loadhidden:''
+    });
     this.getEasy().then(()=>{
         console.log('简单！！！！！！！！！！！！！！');
         this.getMedium().then(()=>{
@@ -234,7 +238,11 @@ Page({
                 // console.log(app.globalData.answerid.indexOf(item));
                 return app.globalData.answerid.indexOf(item._id)==-1;
               })
-            })
+            });
+            this.setData({
+              loadhidden:'hidden',
+              allhihdden:''
+            });
             // this.data.questions.filter((item)=>{
             //   return app.globalData.answerid.indexOf(item)==-1;
             // })
@@ -255,14 +263,6 @@ Page({
       }
     )
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
   /**
    * 生命周期函数--监听页面显示
    */

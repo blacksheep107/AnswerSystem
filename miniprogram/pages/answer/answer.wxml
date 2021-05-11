@@ -1,6 +1,6 @@
 <!--miniprogram/pages/answer/answer.wxml-->
 <loading hidden="{{loadhidden}}">加载题目中</loading>
-<view class="index">
+<view class="index" hidden="{{allhihdden}}">
   <block wx:if="{{questions.length>0&&questions.length>count}}">
     <view class="buttonview">
       <button bindtap="submit" class="button">{{buttontext}}</button>

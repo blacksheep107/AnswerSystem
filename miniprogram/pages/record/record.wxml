@@ -4,8 +4,8 @@
     <text class="noanswer">你还没有答过题！</text>
   </block>
   <block wx:else>
-    <view wx:for="questions">
-      
+    <view wx:for="{{questions}}">
+      <text>{{item.isRight}}</text>
     </view>  
   </block>
 </view>
