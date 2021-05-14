@@ -5,7 +5,17 @@
   </block>
   <block wx:else>
     <view wx:for="{{questions}}">
-      <text>{{item.isRight}}</text>
-    </view>  
+      <view class="card" style="box-shadow:{{item.isRight?'0rpx 1rpx 8rpx #59886b':'0rpx 1rpx 8rpx #c05555'}};">
+        <view class="question">
+          <text>{{item.question.content}}</text>
+        </view>
+        <view class="line"></view>
+        <view class="answer">
+          <view class="youranswer">你的答案：{{item.myanswer}}</view>
+          <view class="youranswer">正确答案：{{item.question.answer}}</view>
+          <view class="analysis">解析：{{item.question.analysis}}</view>
+        </view>
+      </view>
+    </view>
   </block>
 </view>

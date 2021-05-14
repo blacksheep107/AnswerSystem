@@ -231,12 +231,12 @@ Page({
           this.getHard().then(()=>{
             // 去重
             let temp=[];
-            // console.log(app.globalData.answerid);
+            console.log(app.globalData.answerid);
             this.setData({
               questions:this.data.questions.filter((item)=>{
                 // console.log(item);
                 // console.log(app.globalData.answerid.indexOf(item));
-                return app.globalData.answerid.indexOf(item._id)==-1;
+                return app.globalData.answerid.indexOf(item._id)===-1;
               })
             });
             this.setData({

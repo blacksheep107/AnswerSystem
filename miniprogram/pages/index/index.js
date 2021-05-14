@@ -47,7 +47,7 @@ Page({
             app.globalData.id=res.data[0]._id;
             app.globalData.answeredquestions=res.data[0].answeredquestions;
             for(let i=0;i<app.globalData.answeredquestions.length;i++){
-              app.globalData.answerid.push(app.globalData.answeredquestions[i]._id);
+              app.globalData.answerid.push(app.globalData.answeredquestions[i].question._id);
             }
             this.setData({
               name:res.data[0].name,
