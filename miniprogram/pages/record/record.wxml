@@ -10,6 +10,14 @@
           <text>{{item.question.content}}</text>
         </view>
         <view class="line"></view>
+        <view class="chooseborder">
+          <block wx:if="{{item.question.type=='choose'}}" class="chooseborder">
+            <view wx:for="{{item.question.choosecontent}}" wx:for-item="ch" class="choosecontent">
+              <text>{{ch.content}}</text>
+            </view>
+          </block>          
+        </view>
+
         <view class="answer">
           <view class="youranswer">你的答案：{{item.myanswer}}</view>
           <view class="youranswer">正确答案：{{item.question.answer}}</view>

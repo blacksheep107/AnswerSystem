@@ -87,6 +87,9 @@ button{
 .youranswer{
   margin-bottom: 10rpx;
 }
-analysis{
-  font-size: small;
+.chooseborder{
+  margin-bottom: 10rpx;
+}
+.choosecontent{
+  margin-bottom: 10rpx;
 }
