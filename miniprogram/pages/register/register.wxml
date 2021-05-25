@@ -11,6 +11,11 @@
       <input value="{{name}}" bindinput="nameinput" id='name' />      
     </view>
     <view class="line"></view>
+    <view class="info">
+      <label for='class'>班级：</label>
+      <input value="{{classid}}" bindinput="joinclass" placeholder="输入班级编号" id='class' />      
+    </view>
+    <view class="line"></view>
     <button bindtap="registerClick" class="button">注册</button>
   </form>
 </view>

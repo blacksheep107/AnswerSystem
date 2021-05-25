@@ -125,7 +125,13 @@ Page({
             myanswer:this.data.myanswer
           })
         }
-      })
+      });
+      app.globalData.answeredquestions.push({
+        question:this.data.questions[this.data.count],
+        isRight:this.data.isRight,
+        myanswer:this.data.myanswer
+      });
+      app.globalData.answerid.push(this.data.questions[this.data.count]._id);
     }else{
       this.setData({
         buttontext:'确定',
@@ -224,6 +230,7 @@ Page({
     this.setData({
       loadhidden:''
     });
+    console.log(app.globalData);
     this.getEasy().then(()=>{
         console.log('简单！！！！！！！！！！！！！！');
         this.getMedium().then(()=>{

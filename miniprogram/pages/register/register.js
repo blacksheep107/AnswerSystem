@@ -2,6 +2,7 @@
 const db=wx.cloud.database();
 const users=db.collection('users');
 const app=getApp();
+const classcollection=db.collection('class');
 Page({
 
   /**
@@ -10,6 +11,7 @@ Page({
   data: {
     studentid:"",
     name:"",
+    classid:"",
   },
   studentidinput(e){
     this.setData({
@@ -21,39 +23,62 @@ Page({
       name:e.detail.value
     });
   },
+  joinclass(e){
+    this.setData({
+      classid:e.detail.value
+    });
+  },
   registerClick(){
     // 提交
     console.log(this.data);
-    users.add({
-      data:{
-        // openid:app.globalData.openid,
-        studentid:this.data.studentid,
-        name:this.data.name,
-        answeredquestions:[], // 回答过的问题
-      },
+    // 查班级
+    classcollection.where({
+      classid:this.data.classid
+    }).get({
       success:res=>{
         console.log(res);
-        wx.showModal({
-          title:'提示',
-          content:'注册成功',
-          showCancel:false,
-          success:res=>{
-            console.log(res);
-            if(res.confirm){
-              wx.navigateBack({
-                delta: 0,
+        if(res.data.length==0){
+          wx.showModal({
+            title:'提示',
+            content:'没有此班级编号！',
+            showCancel:false
+          });
+        }else{
+          users.add({
+            data:{
+              // openid:app.globalData.openid,
+              studentid:this.data.studentid,
+              name:this.data.name,
+              class:this.data.classid,
+              answeredquestions:[], // 回答过的问题
+            },
+            success:res=>{
+              console.log(res);
+              wx.showModal({
+                title:'提示',
+                content:'注册成功',
+                showCancel:false,
+                success:res=>{
+                  console.log(res);
+                  if(res.confirm){
+                    wx.navigateBack({
+                      delta: 0,
+                    });
+                  }
+                },
+                fail:res=>{
+                  console.log(res);
+                }
               });
-            }
-          },
-          fail:res=>{
-            console.log(res);
-          }
-        });
-        this.globalData.name=this.data.name;
-        this.globalData.studentid=this.data.studentid;
-        this.globalData.id=res._id; // 数据库索引
-      },
+              this.globalData.name=this.data.name;
+              this.globalData.studentid=this.data.studentid;
+              this.globalData.id=res._id; // 数据库索引
+            },
+          })          
+        }
+      }
     })
+
   },
   /**
    * 生命周期函数--监听页面加载
