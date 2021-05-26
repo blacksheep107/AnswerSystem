@@ -19,12 +19,14 @@ App({
       id:'',
       studentid:'',
       name:'',
+      classid:'',
       userInfo:{},
       answeredquestions:[],
       allquestions:[],
       allchoosequestions:[],
       pkquestions:[],
       answerid:[],
+      allquestionsid:[]
     }
   }
 })

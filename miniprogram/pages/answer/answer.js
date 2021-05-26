@@ -5,6 +5,7 @@ const medium=db.collection('medium_question');
 const hard=db.collection('hard_question');
 const users=db.collection('users');
 const app=getApp();
+const classcollection=db.collection('class');
 const _=db.command;
 Page({
 
@@ -27,6 +28,9 @@ Page({
     isRight:null,
     ishidden:'hidden',
     myanswer:'',
+    easyarr:[],
+    mediumarr:[],
+    hardarr:[],
   },
 
   /**
@@ -75,6 +79,7 @@ Page({
             });
           }
         }else if(this.data.questions[this.data.count].choosenum>'1'){
+          // 多选
           this.setData({
             myanswer:this.data.checkboxvalue
           });
@@ -84,7 +89,29 @@ Page({
               bordercolor:'1px solid red',
               ishidden:''
             })
-          }else if(this.data.questions[this.data.count].answer.toString()==this.data.checkboxvalue.toString()){
+          }else if(!this.data.questions[this.data.count].isorder){
+            // 不按序
+            let temp1=this.data.questions[this.data.count].answer;
+            let temp2=this.data.checkboxvalue;
+            console.log(temp1);
+            console.log(temp2);
+            temp1.sort();
+            temp2.sort();
+            if(temp1.toString()==temp2.toString()){
+              this.setData({
+                isRight:true,
+                bordercolor:'1px solid green',
+                ishidden:'hidden'
+              });
+            }else{
+              this.setData({
+                isRight:false,
+                bordercolor:'1px solid red',
+                ishidden:''
+              });
+            }
+          }else if(this.data.questions[this.data.count].isorder&&this.data.questions[this.data.count].answer.toString()==this.data.checkboxvalue.toString()){
+            // 按序
             this.setData({
               isRight:true,
               bordercolor:'1px solid green',
@@ -132,6 +159,7 @@ Page({
         myanswer:this.data.myanswer
       });
       app.globalData.answerid.push(this.data.questions[this.data.count]._id);
+
     }else{
       this.setData({
         buttontext:'确定',
@@ -226,49 +254,118 @@ Page({
       });
     })
   },
+  getClassInfo(){
+    return new Promise(resolve=>{
+      classcollection.where({
+        classid:app.globalData.classid
+      }).get({
+        success:res=>{
+          console.log(res);
+          app.globalData.allquestionsid=res.data[0].questions;
+          // 过滤
+          // console.log(app.globalData.allquestionsid);
+          // console.log(app.globalData.answerid);
+          app.globalData.allquestionsid=app.globalData.allquestionsid.filter(item=>{
+            return app.globalData.answerid.indexOf(item)===-1;
+          });
+          resolve();
+        }
+      })      
+    })
+  },
+  findQuestion(id){
+    console.log(id);
+    return new Promise(resolve=>{
+      easy.doc(id).get({
+        success:res=>{
+          this.data.easyarr.push(res.data);
+          resolve();
+        },
+        fail:res=>{
+          medium.doc(id).get({
+            success:res=>{
+              this.data.mediumarr.push(res.data);
+              resolve();
+            },
+            fail:res=>{
+              hard.doc(id).get({
+                success:res=>{
+                  this.data.hardarr.push(res.data);
+                  resolve();
+                },
+                fail:res=>{
+                  wx.showModal({
+                    title:'提示',
+                    content:'加载失败！',
+                    showCancel:false
+                  });
+                }
+              })
+            }
+          })
+        }
+      });      
+    })
+  },
+  getQuestions(){
+    return new Promise(reso=>{
+      this.getClassInfo().then(()=>{
+        // 找到所有题目详情，放三个数组，最后合成一个
+        new Promise(resolve=>{
+          (async ()=>{
+            console.log(app.globalData.allquestionsid);
+            if(app.globalData.allquestionsid.length==0) resolve();
+            for(let i=0;i<app.globalData.allquestionsid.length;i++){
+              let id=app.globalData.allquestionsid[i];
+              await this.findQuestion(id);
+              if(i==app.globalData.allquestionsid.length-1){
+                resolve();
+              }
+            }
+          })()
+        }).then(()=>{
+          reso();
+        });
+      });
+    })
+  },
   onReady: function (options) {
     this.setData({
       loadhidden:''
     });
-    console.log(app.globalData);
-    this.getEasy().then(()=>{
-        console.log('简单！！！！！！！！！！！！！！');
-        this.getMedium().then(()=>{
-          console.log('中等！！！！！！！！！！');
-          this.getHard().then(()=>{
-            // 去重
-            let temp=[];
-            console.log(app.globalData.answerid);
-            this.setData({
-              questions:this.data.questions.filter((item)=>{
-                // console.log(item);
-                // console.log(app.globalData.answerid.indexOf(item));
-                return app.globalData.answerid.indexOf(item._id)===-1;
-              })
-            });
-            this.setData({
-              loadhidden:'hidden',
-              allhihdden:''
-            });
-            // this.data.questions.filter((item)=>{
-            //   return app.globalData.answerid.indexOf(item)==-1;
-            // })
-            // console.log(this.data.questions);
-            // for(let i=0;i<this.data.questions.length;i++){
-            //   console.log(this.data.questions[i]._id);
-            //   if(!(this.data.questions[i]._id in app.globalData.answerid)){
-            //     temp.push(this.data.questions[i]);
-            //   }else{
-            //     console.log(1);
-            //   }
-            // }
-            // this.data.questions=temp;
-            // console.log(this.data.questions);
-          })
-          }
-        )      
-      }
-    )
+    this.getQuestions().then(()=>{
+      this.setData({
+        questions:this.data.easyarr.concat(this.data.mediumarr.concat(this.data.hardarr))
+      });
+      console.log(this.data.questions);
+      this.setData({
+        loadhidden:'hidden',
+        allhihdden:''
+      });
+    })
+    // console.log(app.globalData);
+    // this.getEasy().then(()=>{
+    //     console.log('简单！！！！！！！！！！！！！！');
+    //     this.getMedium().then(()=>{
+    //       console.log('中等！！！！！！！！！！');
+    //       this.getHard().then(()=>{
+    //         // erase answered questions
+    //         let temp=[];
+    //         console.log(app.globalData.answerid);
+    //         this.setData({
+    //           questions:this.data.questions.filter((item)=>{
+    //             return app.globalData.answerid.indexOf(item._id)===-1;
+    //           })
+    //         });
+    //         this.setData({
+    //           loadhidden:'hidden',
+    //           allhihdden:''
+    //         });
+    //       })
+    //       }
+    //     )      
+    //   }
+    // )
   },
   /**
    * 生命周期函数--监听页面显示

@@ -31,7 +31,6 @@ Page({
   registerClick(){
     // 提交
     console.log(this.data);
-    // 查班级
     classcollection.where({
       classid:this.data.classid
     }).get({
@@ -73,6 +72,7 @@ Page({
               this.globalData.name=this.data.name;
               this.globalData.studentid=this.data.studentid;
               this.globalData.id=res._id; // 数据库索引
+              this.globalData.classid=this.data.classid;  // 班级
             },
           })          
         }

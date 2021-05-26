@@ -46,6 +46,7 @@ Page({
             app.globalData.name=res.data[0].name;
             app.globalData.id=res.data[0]._id;
             app.globalData.answeredquestions=res.data[0].answeredquestions;
+            app.globalData.classid=res.data[0].class;
             for(let i=0;i<app.globalData.answeredquestions.length;i++){
               app.globalData.answerid.push(app.globalData.answeredquestions[i].question._id);
             }
@@ -66,11 +67,6 @@ Page({
           }
         });
       });
-      // wx.loadFontFace({
-      //   family: 'Bitstream Vera Serif Bold',
-      //   source: 'url("https://sungd.github.io/Pacifico.ttf")',
-      //   success: console.log
-      // })
   },
   naviToRecord(){
     wx.navigateTo({
