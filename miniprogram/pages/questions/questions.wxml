@@ -1,14 +1,6 @@
-<!--miniprogram/pages/answer/answer.wxml-->
 <loading hidden="{{loadhidden}}">加载题目中</loading>
-<view class="index" hidden="{{allhihdden}}">
-  <view class="allUnits">
-    <view wx:for="{{allUnits}}">
-      <view class="unitBtn" bindtap="getQuestion" data-item="{{item}}">
-        {{item}}
-      </view>
-    </view>
-  </view>
-  <!-- <block wx:if="{{questions.length>0&&questions.length>count}}">
+<view class="index">
+  <block wx:if="{{questions.length>0&&questions.length>count}}">
     <view class="buttonview">
       <button bindtap="submit" class="button">{{buttontext}}</button>
     </view>
@@ -19,16 +11,16 @@
       <view class="line"></view>
       <block wx:if="{{questions[count].type=='choose'&&questions[count].choosenum==1}}">
         <!-- 单选 -->
-        <!-- <radio-group bindchange="radiochange" class="group">
+        <radio-group bindchange="radiochange" class="group">
           <label wx:for="{{questions[count].choosecontent}}" class="label" style="border:{{radiovalue==item.value?bordercolor:''}};">
             <radio value="{{item.value}}" disabled="{{isdisabled}}" />
             {{item.content}}
           </label>
         </radio-group>
       </block>
-      <block wx:elif="{{questions[count].type=='choose'&&questions[count].choosenum>1}}"> -->
+      <block wx:elif="{{questions[count].type=='choose'&&questions[count].choosenum>1}}">
         <!-- 多选 -->
-        <!-- <checkbox-group bindchange="checkboxchange" class="group">
+        <checkbox-group bindchange="checkboxchange" class="group">
           <label wx:for="{{questions[count].choosecontent}}" class="label">
             <checkbox value="{{item.value}}" disabled="{{isdisabled}}" >
               {{item.content}}
@@ -36,9 +28,9 @@
           </label>
         </checkbox-group>
       </block>
-      <block wx:elif="{{questions[count].type=='fillblank'}}"> -->
+      <block wx:elif="{{questions[count].type=='fillblank'}}">
         <!-- 填空 -->
-        <!-- <input value="{{fillblankContent}}" bindinput="changeContent" focus="{{true}}" placeholder="填写答案..." />
+        <input value="{{fillblankContent}}" bindinput="changeContent" focus="{{true}}" placeholder="填写答案..." />
       </block>
     </view>
     <view class="card" hidden="{{ishidden}}">
@@ -51,5 +43,5 @@
       <image src="finish.png" class="img"></image>
       <text class="fintext">你已经完成了所有题目！</text>
     </view>
-  </block> -->
+  </block>
 </view>

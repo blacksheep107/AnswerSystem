@@ -5,7 +5,8 @@
     "pages/register/register",
     "pages/pkprepare/pkprepare",
     "pages/pk/pk",
-    "pages/record/record"
+    "pages/record/record",
+    "pages/questions/questions"
   ],
   "window": {
     "backgroundColor": "#FFFFFF",
