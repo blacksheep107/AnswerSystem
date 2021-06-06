@@ -50,6 +50,7 @@ Page({
               name:this.data.name,
               class:this.data.classid,
               answeredquestions:[], // 回答过的问题
+              score:{}, // 每章节分数
             },
             success:res=>{
               console.log(res);

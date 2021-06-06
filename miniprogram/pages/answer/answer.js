@@ -60,19 +60,32 @@ Page({
           loadhidden:'hidden',
           allhihdden:'',
         });
-        console.log(this.data.allUnits);
+        users.doc(app.globalData.id).get({
+          success:res=>{
+            let score=res.data.score;
+            for(let i=0;i<this.data.allUnits.length;i++){
+              if(score[this.data.allUnits[i]]==undefined){
+                // 新增单元
+                score[this.data.allUnits[i]]=0; // 0分
+              }
+            }
+            console.log(score);
+            users.doc(app.globalData.id).update({
+              data:{
+                score:score
+              }
+            });
+          }
+        })
       });
     })
-  },
-  requstQuestion(id){
-    
   },
   getQuestion(e){
     let unitid=e.currentTarget.dataset.item;
     console.log(this.data.homework[unitid]);
     let qlist=this.data.homework[unitid];
     wx.navigateTo({
-      url: '../questions/questions?list='+qlist,
+      url: '../questions/questions?list='+qlist+'&&unitname='+unitid,
     });
     
   },

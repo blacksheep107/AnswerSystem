@@ -31,6 +31,8 @@ Page({
     myanswer:'',
     level:'',
     apassright:0, // 每关答对题目数
+    unitname:'',
+    rightArr:[],  // 本次答对的问题id
   },
   finishUnit(){
     wx.showModal({
@@ -50,6 +52,7 @@ Page({
   onLoad: function (options) {
     this.setData({
       loadhidden:'',
+      unitname:options.unitname
     });
     if(options.list==""){
       wx.showModal({
@@ -237,11 +240,27 @@ Page({
         buttontext:'下一题'
       });
       // 是否已答过，更新记录
-      console.log(this.data.myanswer);
       users.doc(app.globalData.id).get({
         success:res=>{
           let data=res.data.answeredquestions;
           let flag=false;
+          let score=res.data.score;
+          
+          if(this.data.isRight){
+            this.setData({
+              rightArr:this.data.rightArr.concat(this.data.questions[this.data.count]._id)
+            });
+            // 做对加10分
+            score[this.data.unitname]+=10;
+            console.log(score);
+            users.doc(app.globalData.id).update({
+              data:{
+                score:score
+              }
+            })
+          }
+          console.log(this.data.rightArr);
+
           for(let i=0;i<data.length;i++){
             if(data[i].question._id==this.data.questions[this.data.count]._id){
               data[i].isRight=this.data.isRight;
@@ -272,7 +291,7 @@ Page({
               isRight:this.data.isRight,
               myanswer:this.data.myanswer
             });
-            app.globalData.answerid.push(this.data.questions[this.data.count]._id);            
+            app.globalData.answerid.push(this.data.questions[this.data.count]._id);
           }
         }
       })
@@ -290,7 +309,7 @@ Page({
         // 结束一章的一关
         // 计算一关得分，全对进入下一关
         if(this.data.level=='easy'){
-          if(this.data.apassright==this.data.easyq.length){
+          if(this.data.apassright==this.data.questions.length){
             // 全对，下一关
             if(this.data.mediumq.length>0){
               this.setData({
@@ -305,15 +324,22 @@ Page({
             }
           }else{
             // 重答easy
+            let questions=[];
+            this.data.easyq.forEach(item=>{
+              if(this.data.rightArr.indexOf(item._id)==-1){
+                // 答对的题不再出现
+                questions.push(item);
+              }
+            })
             this.setData({
-              questions:this.data.easyq,
+              questions:questions,
               apassright:0,
               count:0,
               buttontext:'确定',
             });
           }
         }else if(this.data.level=='medium'){
-          if(this.data.apassright==this.data.mediumq.length){
+          if(this.data.apassright==this.data.questions.length){
             // 全对，下一关
             if(this.data.hardq.length>0){
               this.setData({
@@ -323,19 +349,35 @@ Page({
               this.finishUnit();
             }            
           }else{
+            // 重开medium
+            let questions=[];
+            this.data.mediumq.forEach(item=>{
+              if(this.data.rightArr.indexOf(item._id)==-1){
+                // 答对的题不再出现
+                questions.push(item);
+              }
+            })
             this.setData({
-              questions:this.data.mediumq,
+              questions:questions,
               apassright:0,
               count:0,
               buttontext:'确定',
             });
           }
         }else if(this.data.level=='hard'){
-          if(this.data.apassright==this.data.hardq.length){
+          if(this.data.apassright==this.data.questions.length){
             this.finishUnit();
           }else{
+            // 重开hard
+            let questions=[];
+            this.data.hardq.forEach(item=>{
+              if(this.data.rightArr.indexOf(item._id)==-1){
+                // 答对的题不再出现
+                questions.push(item);
+              }
+            })
             this.setData({
-              questions:this.data.hardq,
+              questions:quesitons,
               apassright:0,
               count:0,
               buttontext:'确定',
