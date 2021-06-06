@@ -75,3 +75,9 @@ button{
     font-size: x-large;
     color: cadetblue;
 }
+.qlevel{
+  font-weight: bold;
+  margin-right: 10rpx;
+  font-size: 40rpx;
+  color: grey;
+}

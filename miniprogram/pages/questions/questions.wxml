@@ -6,6 +6,7 @@
     </view>
     <view class="card">
       <view class="question">
+        <text class="qlevel">{{questions[count].level=='easy'?'易':(questions[count].level=='hard'?'难':'中')}}</text>
         <text>{{questions[count].content}}</text>
       </view>
       <view class="line"></view>
