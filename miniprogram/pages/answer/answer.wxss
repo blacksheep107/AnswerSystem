@@ -75,3 +75,16 @@ button{
     font-size: x-large;
     color: cadetblue;
 }
+.unitBtn{
+  box-shadow: 8rpx 8rpx 0rpx -1rpx darkseagreen,-8rpx -8rpx 0rpx -1rpx cornflowerblue;
+  padding: 10px;
+  margin: 20rpx;
+}
+.allUnits{
+  display: flex;
+  font-size: 40rpx;
+  margin: 20rpx;
+  color: dimgray;
+  flex-direction: column;
+  width: fit-content;
+}

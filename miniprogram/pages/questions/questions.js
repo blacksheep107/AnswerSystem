@@ -2,7 +2,7 @@
 const db=wx.cloud.database();
 const app=getApp();
 const classcollection=db.collection('class');
-const quesitons=db.collection('questions');
+const questions=db.collection('questions');
 const _=db.command;
 const users=db.collection('users');
 
@@ -90,7 +90,7 @@ Page({
         });
       }
       this.data.idlist.forEach(id=>{
-        quesitons.doc(id).get({
+        questions.doc(id).get({
           success:res=>{
             if(res.data.level=='easy'){
               this.data.easyq.push(res.data);
@@ -99,7 +99,6 @@ Page({
             }else if(res.data.level=='hard'){
               this.data.hardq.push(res.data);
             }
-            console.log(count);
             if(++count==this.data.idlist.length)  resolve();
           }
         });
@@ -239,6 +238,44 @@ Page({
       this.setData({
         buttontext:'下一题'
       });
+      // 更新教师端，学生做的正确错误
+      questions.doc(this.data.questions[this.data.count]._id).get({
+        success:res=>{
+          console.log(res);
+          let olddid=res.data.studentsdid;
+          let flag=false;
+          for(let i=0;i<olddid.length;i++){
+            if(olddid[i].studentid==app.globalData.studentid){
+              flag=true;
+              olddid[i]={
+                studentid:app.globalData.studentid,
+                studentname:app.globalData.name,
+                isRight:this.data.isRight
+              }
+              break;
+            }
+          }
+          if(!flag){
+            olddid.push({
+              studentid:app.globalData.studentid,
+              studentname:app.globalData.name,
+              isRight:this.data.isRight
+            });
+          }
+          console.log(olddid);
+          questions.doc(this.data.questions[this.data.count]._id).update({
+            data:{
+              studentsdid:olddid
+            },
+            success:res=>{
+              console.log(res);
+            },
+            fail:res=>{
+              console.log(res);
+            }
+          })
+        }
+      })
       // 是否已答过，更新记录
       users.doc(app.globalData.id).get({
         success:res=>{
@@ -260,7 +297,7 @@ Page({
             })
           }
           console.log(this.data.rightArr);
-
+          // 更新users的数据
           for(let i=0;i<data.length;i++){
             if(data[i].question._id==this.data.questions[this.data.count]._id){
               data[i].isRight=this.data.isRight;
@@ -313,11 +350,13 @@ Page({
             // 全对，下一关
             if(this.data.mediumq.length>0){
               this.setData({
-                questions:this.data.mediumq
+                questions:this.data.mediumq,
+                count:0
               });
             }else if(this.data.hardq.length>0){
               this.setData({
-                questions:this.data.hardq
+                questions:this.data.hardq,
+                count:0
               });
             }else if(this.data.hardq.length==0){
               this.finishUnit();
@@ -343,7 +382,8 @@ Page({
             // 全对，下一关
             if(this.data.hardq.length>0){
               this.setData({
-                questions:this.data.hardq
+                questions:this.data.hardq,
+                count:0
               });
             }else{
               this.finishUnit();
@@ -377,7 +417,7 @@ Page({
               }
             })
             this.setData({
-              questions:quesitons,
+              questions:questions,
               apassright:0,
               count:0,
               buttontext:'确定',
