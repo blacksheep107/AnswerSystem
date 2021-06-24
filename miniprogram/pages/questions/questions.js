@@ -33,6 +33,7 @@ Page({
     apassright:0, // 每关答对题目数
     unitname:'',
     rightArr:[],  // 本次答对的问题id
+    score:0,  // 本次答题分数
   },
   finishUnit(){
     wx.showModal({
@@ -41,7 +42,9 @@ Page({
       showCancel:false,
       success: (result) => {
         if(result.confirm){
-          wx.navigateBack();
+          wx.navigateBack({
+            delta:1
+          });
         }
       },
     });
@@ -50,6 +53,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    console.log(options);
     this.setData({
       loadhidden:'',
       unitname:options.unitname
@@ -71,17 +75,16 @@ Page({
     // 放三个数组
     new Promise(resolve=>{
       // 过滤
-      for(let i=0;i<temp.length;i++){
-        let index=app.globalData.answerid.indexOf(temp[i]);
-        console.log(index);
-        console.log(app.globalData.answeredquestions[index]);
-        if(index!=-1&&app.globalData.answeredquestions[index].isRight==true){
-          // 答过且答对，不重做
-          ;
-        }else{
-          this.data.idlist.push(temp[i]);
-        }
-      }
+      // for(let i=0;i<temp.length;i++){
+      //   let index=app.globalData.answerid.indexOf(temp[i]);
+      //   if(index!=-1&&app.globalData.answeredquestions[index].isRight==true){
+      //     // 答过且答对，不重做
+      //     ;
+      //   }else{
+      //     this.data.idlist.push(temp[i]);
+      //   }
+      // }
+      this.data.idlist=temp;  // 不过滤
       console.log(this.data.idlist);
       if(this.data.idlist.length==0){
         this.setData({
@@ -102,24 +105,14 @@ Page({
             if(++count==this.data.idlist.length)  resolve();
           }
         });
-      });      
+      });
     }).then(()=>{
-      if(this.data.easyq.length>0){
-        // 易未完成
+      // 又改需求了，三个数组一起
+      let questemp=this.data.easyq.concat(this.data.mediumq.concat(this.data.hardq));
+      if(questemp.length>0){
         this.setData({
-          questions:this.data.easyq,
-          level:'easy'
-        });
-      }else if(this.data.mediumq.length>0){
-        this.setData({
-          questions:this.data.mediumq,
-          level:'medium'
-        });
-      }else if(this.data.hardq.length>0){
-        this.setData({
-          questions:this.data.hardq,
-          level:'hard'
-        });
+          questions:questemp
+        });        
       }else{
         this.finishUnit();
       }
@@ -166,7 +159,7 @@ Page({
             this.setData({
               isRight:false,
               bordercolor:'1px solid red',
-              ishidden:''
+              // ishidden:''
             });
           }
         }else if(this.data.questions[this.data.count].choosenum>'1'){
@@ -179,7 +172,7 @@ Page({
             this.setData({
               isRight:false,
               bordercolor:'1px solid red',
-              ishidden:''
+              // ishidden:''
             })
           }else if(!this.data.questions[this.data.count].isorder){
             // 不按序
@@ -198,7 +191,7 @@ Page({
               this.setData({
                 isRight:false,
                 bordercolor:'1px solid red',
-                ishidden:''
+                // ishidden:''
               });
             }
           }else if(this.data.questions[this.data.count].isorder&&this.data.questions[this.data.count].answer.toString()==this.data.myanswer.toString()){
@@ -213,7 +206,7 @@ Page({
             this.setData({
               isRight:false,
               bordercolor:'1px solid red',
-              ishidden:''
+              // ishidden:''
             });
           }
         }
@@ -231,7 +224,7 @@ Page({
         }else{
           this.setData({
             isRight:false,
-            ishidden:''
+            // ishidden:''
           });
         }
       }
@@ -247,6 +240,7 @@ Page({
           for(let i=0;i<olddid.length;i++){
             if(olddid[i].studentid==app.globalData.studentid){
               flag=true;
+              // 做过这题
               olddid[i]={
                 studentid:app.globalData.studentid,
                 studentname:app.globalData.name,
@@ -256,13 +250,14 @@ Page({
             }
           }
           if(!flag){
+            // 没做过这题
             olddid.push({
               studentid:app.globalData.studentid,
               studentname:app.globalData.name,
               isRight:this.data.isRight
             });
           }
-          console.log(olddid);
+          // 更新做过题目的学生
           questions.doc(this.data.questions[this.data.count]._id).update({
             data:{
               studentsdid:olddid
@@ -276,19 +271,18 @@ Page({
           })
         }
       })
-      // 是否已答过，更新记录
+      // 更新分数
       users.doc(app.globalData.id).get({
         success:res=>{
           let data=res.data.answeredquestions;
           let flag=false;
           let score=res.data.score;
-          
           if(this.data.isRight){
             this.setData({
               rightArr:this.data.rightArr.concat(this.data.questions[this.data.count]._id)
             });
             // 做对加10分
-            score[this.data.unitname]+=10;
+            score[this.data.unitname].score+=10;
             console.log(score);
             users.doc(app.globalData.id).update({
               data:{
@@ -296,8 +290,9 @@ Page({
               }
             })
           }
-          console.log(this.data.rightArr);
-          // 更新users的数据
+          
+          // console.log(this.data.rightArr);
+          // 更新users的数据, 机会用完才显示记录TODO
           for(let i=0;i<data.length;i++){
             if(data[i].question._id==this.data.questions[this.data.count]._id){
               data[i].isRight=this.data.isRight;
@@ -343,87 +338,34 @@ Page({
         bordercolor:'',
       });
       if(this.data.count==this.data.questions.length){
-        // 结束一章的一关
-        // 计算一关得分，全对进入下一关
-        if(this.data.level=='easy'){
-          if(this.data.apassright==this.data.questions.length){
-            // 全对，下一关
-            if(this.data.mediumq.length>0){
-              this.setData({
-                questions:this.data.mediumq,
-                count:0
-              });
-            }else if(this.data.hardq.length>0){
-              this.setData({
-                questions:this.data.hardq,
-                count:0
-              });
-            }else if(this.data.hardq.length==0){
-              this.finishUnit();
-            }
-          }else{
-            // 重答easy
-            let questions=[];
-            this.data.easyq.forEach(item=>{
-              if(this.data.rightArr.indexOf(item._id)==-1){
-                // 答对的题不再出现
-                questions.push(item);
+        // 结束一章答题，机会--，最后一次机会记录
+        users.doc(app.globalData.id).get({
+          success:res=>{
+            res.data.score[this.data.unitname].chance--;
+            console.log(res.data);
+            users.doc(app.globalData.id).update({
+              data:{
+                score:res.data.score,
+              },
+              success:res=>{
+                console.log(res);
+                wx.showModal({
+                  title:'提示',
+                  content:'你已完成闯关！',
+                  showCancel:false,
+                  success:res=>{
+                    if(res.confirm){
+                      wx.navigateBack();
+                    }
+                  }
+                })
+              },
+              fail:res=>{
+                console.log(res);
               }
             })
-            this.setData({
-              questions:questions,
-              apassright:0,
-              count:0,
-              buttontext:'确定',
-            });
           }
-        }else if(this.data.level=='medium'){
-          if(this.data.apassright==this.data.questions.length){
-            // 全对，下一关
-            if(this.data.hardq.length>0){
-              this.setData({
-                questions:this.data.hardq,
-                count:0
-              });
-            }else{
-              this.finishUnit();
-            }            
-          }else{
-            // 重开medium
-            let questions=[];
-            this.data.mediumq.forEach(item=>{
-              if(this.data.rightArr.indexOf(item._id)==-1){
-                // 答对的题不再出现
-                questions.push(item);
-              }
-            })
-            this.setData({
-              questions:questions,
-              apassright:0,
-              count:0,
-              buttontext:'确定',
-            });
-          }
-        }else if(this.data.level=='hard'){
-          if(this.data.apassright==this.data.questions.length){
-            this.finishUnit();
-          }else{
-            // 重开hard
-            let questions=[];
-            this.data.hardq.forEach(item=>{
-              if(this.data.rightArr.indexOf(item._id)==-1){
-                // 答对的题不再出现
-                questions.push(item);
-              }
-            })
-            this.setData({
-              questions:questions,
-              apassright:0,
-              count:0,
-              buttontext:'确定',
-            });
-          }
-        }
+        })
       }
     }
   },

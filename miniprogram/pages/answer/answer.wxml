@@ -2,10 +2,11 @@
 <loading hidden="{{loadhidden}}">加载题目中</loading>
 <view class="index" hidden="{{allhihdden}}">
   <view class="allUnits">
-    <view wx:for="{{allUnits}}">
-      <view class="unitBtn" bindtap="getQuestion" data-item="{{item}}">
+    <view wx:for="{{allUnits}}" class="oneunit" bindtap="getQuestion" data-item="{{item}}">
+      <view class="unitBtn" >
         {{item}}
       </view>
+      <view class="lastchance">剩余机会：{{chance[item]}}</view>
     </view>
   </view>
   <!-- <block wx:if="{{questions.length>0&&questions.length>count}}">

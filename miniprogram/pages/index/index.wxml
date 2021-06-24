@@ -20,5 +20,6 @@
     <view bindtap="naviToRecord" class="pk">
       <text class="text">答题记录</text>
     </view>
+    <image class="robot" src="cloud://fzuanswersystem-7g3gmzjw761ecfdb.667a-fzuanswersystem-7g3gmzjw761ecfdb-1305763704/robot.png" />
   </view>
 </view>

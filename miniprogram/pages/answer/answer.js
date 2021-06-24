@@ -33,6 +33,7 @@ Page({
     hardarr:[],
     allUnits:[],
     homework:{},
+    chance:{},
   },
 
   /**
@@ -64,12 +65,24 @@ Page({
           success:res=>{
             let score=res.data.score;
             for(let i=0;i<this.data.allUnits.length;i++){
-              if(score[this.data.allUnits[i]]==undefined){
-                // 新增单元
-                score[this.data.allUnits[i]]=0; // 0分
+              if(score[this.data.allUnits[i]]==undefined){  //新单元
+                score[this.data.allUnits[i]]={
+                  score:0,
+                  chance:this.data.homework[this.data.allUnits[i]].chance
+                };
+                this.data.chance[this.data.allUnits[i]]=this.data.homework[this.data.allUnits[i]].chance;
+              }else{
+                score[this.data.allUnits[i]]={
+                  score:res.data.score[this.data.allUnits[i]].score,
+                  chance:res.data.score[this.data.allUnits[i]].chance,
+                };
+                this.data.chance[this.data.allUnits[i]]=res.data.score[this.data.allUnits[i]].chance;
               }
             }
             console.log(score);
+            this.setData({
+              chance:this.data.chance
+            });
             users.doc(app.globalData.id).update({
               data:{
                 score:score
@@ -84,16 +97,22 @@ Page({
     let unitid=e.currentTarget.dataset.item;
     console.log(this.data.homework[unitid]);
     let qlist=this.data.homework[unitid];
-    wx.navigateTo({
-      url: '../questions/questions?list='+qlist+'&&unitname='+unitid,
-    });
-    
+    if(this.data.chance[unitid]<=0){
+      wx.showModal({
+        title:'提示',
+        content:'你的答题机会已用完！',
+        showCancel:false,
+      });
+    }else{
+      wx.navigateTo({
+        url: '../questions/questions?list='+qlist.questions+'&&unitname='+unitid+'&&chance='+this.data.chance[unitid],
+      });      
+    }
   },
   onReady: function (options) {
     this.setData({
       loadhidden:''
     });
-    this.getUnits();
   },
   /**
    * 生命周期函数--监听页面显示
@@ -101,7 +120,8 @@ Page({
   onShow: function () {
     this.setData({
       loadhidden:'hidden'
-    })
+    });
+    this.getUnits();
   },
 
   /**
