@@ -34,6 +34,7 @@ Page({
     unitname:'',
     rightArr:[],  // 本次答对的问题id
     score:0,  // 本次答题分数
+    blankcontents:{}, // 填空题多个答案
   },
   finishUnit(){
     wx.showModal({
@@ -74,17 +75,7 @@ Page({
     let count=0;
     // 放三个数组
     new Promise(resolve=>{
-      // 过滤
-      // for(let i=0;i<temp.length;i++){
-      //   let index=app.globalData.answerid.indexOf(temp[i]);
-      //   if(index!=-1&&app.globalData.answeredquestions[index].isRight==true){
-      //     // 答过且答对，不重做
-      //     ;
-      //   }else{
-      //     this.data.idlist.push(temp[i]);
-      //   }
-      // }
-      this.data.idlist=temp;  // 不过滤
+      this.data.idlist=temp;
       console.log(this.data.idlist);
       if(this.data.idlist.length==0){
         this.setData({
@@ -123,9 +114,7 @@ Page({
     })
   },
   changeContent(e){
-    this.setData({
-      fillblankContent:e.detail.value
-    });
+    this.data.blankcontents[e.target.dataset.index]=e.detail.value;
   },
   radiochange(e){
     this.setData({
@@ -212,10 +201,14 @@ Page({
         }
       }else if(this.data.questions[this.data.count].type=='fillblank'){
         // 填空
-        this.setData({
-          myanswer:this.data.fillblankContent
-        });
-        if(this.data.questions[this.data.count].answer==this.data.myanswer){
+        let temp=[];
+        Object.keys(this.data.blankcontents).forEach(item=>{
+          temp.push(this.data.blankcontents[item]);
+        })
+        this.data.myanswer=JSON.stringify(temp);
+        console.log(this.data.myanswer);
+        console.log(JSON.stringify(this.data.questions[this.data.count].answer));
+        if(JSON.stringify(this.data.questions[this.data.count].answer)==this.data.myanswer){
           this.setData({
             isRight:true,
             ishidden:'hidden',
@@ -281,8 +274,13 @@ Page({
             this.setData({
               rightArr:this.data.rightArr.concat(this.data.questions[this.data.count]._id)
             });
-            // 做对加10分
-            score[this.data.unitname].score+=10;
+            // 加分
+            let point=this.data.questions[this.data.count].point;
+            if(point==undefined||point==""){
+              score[this.data.unitname].score+=0;
+            }else{
+              score[this.data.unitname].score+=Number.parseInt(point);
+            }
             console.log(score);
             users.doc(app.globalData.id).update({
               data:{
@@ -290,7 +288,6 @@ Page({
               }
             })
           }
-          
           // console.log(this.data.rightArr);
           // 更新users的数据, 机会用完才显示记录TODO
           for(let i=0;i<data.length;i++){

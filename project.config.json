@@ -34,7 +34,7 @@
   },
   "appid": "wx53d4c253e80f5250",
   "projectname": "AnswerSystem",
-  "libVersion": "2.14.1",
+  "libVersion": "2.11.2",
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},
   "cloudfunctionTemplateRoot": "cloudfunctionTemplate",

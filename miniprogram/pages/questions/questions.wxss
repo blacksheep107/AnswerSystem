@@ -81,3 +81,9 @@ button{
   font-size: 40rpx;
   color: grey;
 }
+.input-blank{
+  padding: 20rpx;
+  background: #E1E8EB;
+  border-radius: 5rpx;
+  margin-bottom: 20rpx;
+}

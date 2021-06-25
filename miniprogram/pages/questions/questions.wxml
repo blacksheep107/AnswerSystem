@@ -9,6 +9,7 @@
         <text class="qlevel">{{questions[count].level=='easy'?'易':(questions[count].level=='hard'?'难':'中')}}</text>
         <text>{{questions[count].content}}</text>
       </view>
+      <image src="{{questions[count].pictures}}"></image>
       <view class="line"></view>
       <block wx:if="{{questions[count].type=='choose'&&questions[count].choosenum==1}}">
         <!-- 单选 -->
@@ -31,7 +32,8 @@
       </block>
       <block wx:elif="{{questions[count].type=='fillblank'}}">
         <!-- 填空 -->
-        <input value="{{fillblankContent}}" bindinput="changeContent" focus="{{true}}" placeholder="填写答案..." />
+        <input class="input-blank" wx:for="{{questions[count].answer}}" wx:for-index='i' data-index='{{i}}' bindinput="changeContent" placeholder="填写答案..." />
+        <!-- <input value="{{fillblankContent}}" bindinput="changeContent" focus="{{true}}" placeholder="填写答案..." /> -->
       </block>
     </view>
     <view class="card" hidden="{{ishidden}}">
