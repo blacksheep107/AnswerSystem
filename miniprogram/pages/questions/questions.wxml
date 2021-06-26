@@ -9,7 +9,7 @@
         <text class="qlevel">{{questions[count].level=='easy'?'易':(questions[count].level=='hard'?'难':'中')}}</text>
         <text>{{questions[count].content}}</text>
       </view>
-      <image src="{{questions[count].pictures}}"></image>
+      <image wx:if="{{questions[count].pictures}}" src="{{questions[count].pictures}}"></image>
       <view class="line"></view>
       <block wx:if="{{questions[count].type=='choose'&&questions[count].choosenum==1}}">
         <!-- 单选 -->

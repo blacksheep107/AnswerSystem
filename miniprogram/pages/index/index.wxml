@@ -7,19 +7,39 @@
     <view class="student">
       <text>{{name}}</text>
       <text>{{studentid}}</text>
+      <text>班级编号: {{classid}}</text>
+    </view>
+    <view class="score">
+      <text>答题数：{{answeredquestions.length}}</text>
+      <text>总分：{{score}}</text>
     </view>
     <!-- <open-data type='userNickName' class="name"></open-data> -->
   </view>
+  <!-- <image class="tipic" src="https://667a-fzuanswersystem-7g3gmzjw761ecfdb-1305763704.tcb.qcloud.la/stock-photo-1384554629.jpg?sign=b296fee647067c787be1819c182d0f91&t=1624712895" /> -->
+  <div class="line">super AI</div>
   <view class="choices">
-    <view class="pk" bindtap="naviToAnswer">
+    <view class="b1" bindtap="naviToAnswer">
       <text class="text">答题</text>
     </view>
     <view bindtap="getUserProfile" class="pk">
       <text class="text">好友PK</text>
     </view>
-    <view bindtap="naviToRecord" class="pk">
+    <view bindtap="naviToRecord" class="b2">
       <text class="text">答题记录</text>
     </view>
-    <image class="robot" src="cloud://fzuanswersystem-7g3gmzjw761ecfdb.667a-fzuanswersystem-7g3gmzjw761ecfdb-1305763704/robot.png" />
+    <view class="bottom">
+      <div class="rankb">
+        <image class="rank" src="https://667a-fzuanswersystem-7g3gmzjw761ecfdb-1305763704.tcb.qcloud.la/%E6%8E%92%E8%A1%8C%E6%A6%9C.png?sign=f16074a38416611cfc6f2f6cf4357e49&t=1624682348" />     
+        <text>排行榜</text> 
+      </div>
+      <div class="rankb">
+        <image class="rank" src="https://667a-fzuanswersystem-7g3gmzjw761ecfdb-1305763704.tcb.qcloud.la/%E5%B7%A5%E5%8D%95%E5%8F%8D%E9%A6%88%20(1).png?sign=e8aa4232b005de0a0a9d3f46f9a27d08&t=1624683046" />     
+        <text>反馈</text>
+      </div>      
+      <div class="rankb">
+        <image class="rank" src="https://667a-fzuanswersystem-7g3gmzjw761ecfdb-1305763704.tcb.qcloud.la/%E6%89%93%E5%8D%A1%20(%E6%9C%AA%E9%80%89).png?sign=cc13651dca92d6ba311ad305cbb055a7&t=1624683070" />     
+        <text>打卡</text>
+      </div>   
+    </view>
   </view>
 </view>

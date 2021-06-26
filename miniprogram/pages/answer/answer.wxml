@@ -3,12 +3,19 @@
 <view class="index" hidden="{{allhihdden}}">
   <view class="allUnits">
     <view wx:for="{{allUnits}}" class="oneunit" bindtap="getQuestion" data-item="{{item}}">
-      <view class="unitBtn" >
-        {{item}}
+      <image class="icon" src="https://667a-fzuanswersystem-7g3gmzjw761ecfdb-1305763704.tcb.qcloud.la/%E7%AC%94.png?sign=fcd625dce0454ddf7cda77969d08e03a&t=1624715273"></image>
+      <view class="unitandc">
+        <view class="unitBtn" >
+          {{item}}
+        </view>
+        <div class="line"></div>
+        <view class="lastchance">剩余机会：{{chance[item]}}</view>        
       </view>
-      <view class="lastchance">剩余机会：{{chance[item]}}</view>
     </view>
   </view>
+  <div class="saying">书山有路勤为径，学海无涯苦作舟。</div>
+  <image class="water" src="https://667a-fzuanswersystem-7g3gmzjw761ecfdb-1305763704.tcb.qcloud.la/%E6%B3%A2%E6%B5%AA.png?sign=ce50d38585f8f2a62a281af38858e847&t=1624720200" />
+  <image class="boat" src="https://667a-fzuanswersystem-7g3gmzjw761ecfdb-1305763704.tcb.qcloud.la/%E8%88%B9.png?sign=9c926d5db138855a0bc7559301b3910c&t=1624719837" />
   <!-- <block wx:if="{{questions.length>0&&questions.length>count}}">
     <view class="buttonview">
       <button bindtap="submit" class="button">{{buttontext}}</button>

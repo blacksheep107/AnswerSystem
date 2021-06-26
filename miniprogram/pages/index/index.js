@@ -17,6 +17,9 @@ Page({
     studentid:'',
     takeSession: false,
     requestResult: '',
+    classid:'',
+    answeredquestions:[],
+    score:0,
     canIUseGetUserProfile: false,
     canIUseOpenData: wx.canIUse('open-data.type.userAvatarUrl') // 如需尝试获取用户信息可改为false
   },
@@ -50,9 +53,16 @@ Page({
             for(let i=0;i<app.globalData.answeredquestions.length;i++){
               app.globalData.answerid.push(app.globalData.answeredquestions[i].question._id);
             }
+            this.data.score=0;
+            Object.keys(res.data[0].score).forEach(item=>{
+              this.data.score+=res.data[0].score[item].score;
+            });
             this.setData({
               name:res.data[0].name,
-              studentid:res.data[0].studentid
+              studentid:res.data[0].studentid,
+              classid:res.data[0].class,
+              answeredquestions:res.data[0].answeredquestions,
+              score:this.data.score
             });
             // 每次登陆都清空pk数据
             wx.cloud.callFunction({

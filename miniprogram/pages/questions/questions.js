@@ -127,6 +127,9 @@ Page({
     });
   },
   submit(){
+    this.setData({
+      loadhidden:''
+    });
     if(this.data.buttontext=='确定'){
       // 判断正误
       this.setData({
@@ -134,6 +137,7 @@ Page({
       });
       if(this.data.questions[this.data.count].type=='choose'){
         if(this.data.questions[this.data.count].choosenum=='1'){
+          // 单选
           this.setData({
             myanswer:this.data.radiovalue
           });
@@ -142,12 +146,14 @@ Page({
               isRight:true,
               bordercolor:'1px solid green',
               ishidden:'hidden',
-              apassright:this.data.apassright+1
+              apassright:this.data.apassright+1,
+              loadhidden:'hidden'
             });
           }else{
             this.setData({
               isRight:false,
               bordercolor:'1px solid red',
+              loadhidden:'hidden'
               // ishidden:''
             });
           }
@@ -161,6 +167,7 @@ Page({
             this.setData({
               isRight:false,
               bordercolor:'1px solid red',
+              loadhidden:'hidden'
               // ishidden:''
             })
           }else if(!this.data.questions[this.data.count].isorder){
@@ -174,12 +181,14 @@ Page({
                 isRight:true,
                 bordercolor:'1px solid green',
                 ishidden:'hidden',
-                apassright:this.data.apassright+1
+                apassright:this.data.apassright+1,
+                loadhidden:'hidden'
               });
             }else{
               this.setData({
                 isRight:false,
                 bordercolor:'1px solid red',
+                loadhidden:'hidden'
                 // ishidden:''
               });
             }
@@ -189,12 +198,14 @@ Page({
               isRight:true,
               bordercolor:'1px solid green',
               ishidden:'hidden',
-              apassright:this.data.apassright+1
+              apassright:this.data.apassright+1,
+              loadhidden:'hidden'
             });
           }else{
             this.setData({
               isRight:false,
               bordercolor:'1px solid red',
+              loadhidden:'hidden'
               // ishidden:''
             });
           }
@@ -212,19 +223,22 @@ Page({
           this.setData({
             isRight:true,
             ishidden:'hidden',
-            apassright:this.data.apassright+1
+            apassright:this.data.apassright+1,
+            loadhidden:'hidden'
           });
         }else{
           this.setData({
             isRight:false,
+            loadhidden:'hidden'
             // ishidden:''
           });
         }
       }
       this.setData({
-        buttontext:'下一题'
+        buttontext:'下一题',
+        loadhidden:'hidden'
       });
-      // 更新教师端，学生做的正确错误
+      // 更新教师端，学生做对一次则之后一直默认是对的
       questions.doc(this.data.questions[this.data.count]._id).get({
         success:res=>{
           console.log(res);
@@ -233,11 +247,14 @@ Page({
           for(let i=0;i<olddid.length;i++){
             if(olddid[i].studentid==app.globalData.studentid){
               flag=true;
-              // 做过这题
-              olddid[i]={
-                studentid:app.globalData.studentid,
-                studentname:app.globalData.name,
-                isRight:this.data.isRight
+              // 做过这题，之前错了现在对了才改，之前对了就不改
+              // 否则会刷分
+              if(!old[i].isRight){
+                olddid[i]={
+                  studentid:app.globalData.studentid,
+                  studentname:app.globalData.name,
+                  isRight:this.data.isRight
+                }                
               }
               break;
             }
@@ -270,42 +287,51 @@ Page({
           let data=res.data.answeredquestions;
           let flag=false;
           let score=res.data.score;
-          if(this.data.isRight){
-            this.setData({
-              rightArr:this.data.rightArr.concat(this.data.questions[this.data.count]._id)
-            });
-            // 加分
-            let point=this.data.questions[this.data.count].point;
-            if(point==undefined||point==""){
-              score[this.data.unitname].score+=0;
-            }else{
-              score[this.data.unitname].score+=Number.parseInt(point);
-            }
-            console.log(score);
-            users.doc(app.globalData.id).update({
-              data:{
-                score:score
-              }
-            })
-          }
-          // console.log(this.data.rightArr);
+          let oldRight;
           // 更新users的数据, 机会用完才显示记录TODO
           for(let i=0;i<data.length;i++){
             if(data[i].question._id==this.data.questions[this.data.count]._id){
-              data[i].isRight=this.data.isRight;
-              data[i].myanswer=this.data.myanswer;
-              users.doc(app.globalData.id).update({
-                data:{
-                  answeredquestions:data
-                }
-              });
-              app.globalData.answeredquestions=data;
+              oldRight=data[i].isRight;
+              // 如果做对了之后不再更新学生答案
+              if(!oldRight&&this.data.isRight){
+                // 之前做错，现在做对
+                data[i].isRight=true;
+                data[i].myanswer=this.data.myanswer;     
+                users.doc(app.globalData.id).update({
+                  data:{
+                    answeredquestions:data
+                  }
+                });
+                app.globalData.answeredquestions=data;
+              }
               flag=true;
               break;
             }
           }
+          // console.log(oldRight);  // 之前做的正误
           if(!flag){
             // 没做过的题
+            if(this.data.isRight){
+              // 做对
+              this.setData({
+                rightArr:this.data.rightArr.concat(this.data.questions[this.data.count]._id)
+              });
+              // 加分，没做过或做错的题才加分
+              // 做对后再做错不减分
+              let point=this.data.questions[this.data.count].point;
+              if(point==undefined||point==""){
+                // 未设置分值按0
+                score[this.data.unitname].score+=0;
+              }else{
+                score[this.data.unitname].score+=Number.parseInt(point);
+              }
+              console.log(score);
+              users.doc(app.globalData.id).update({
+                data:{
+                  score:score
+                }
+              })
+            };
             users.doc(app.globalData.id).update({
               data:{
                 answeredquestions:_.push({
@@ -321,6 +347,20 @@ Page({
               myanswer:this.data.myanswer
             });
             app.globalData.answerid.push(this.data.questions[this.data.count]._id);
+          }else if(this.data.isRight&&!oldRight){
+            // 做过的题，之前做错这次做对，加分
+              let point=this.data.questions[this.data.count].point;
+              if(point==undefined||point==""){
+                score[this.data.unitname].score+=0;
+              }else{
+                score[this.data.unitname].score+=Number.parseInt(point);
+              }
+              console.log(score);
+              users.doc(app.globalData.id).update({
+                data:{
+                  score:score
+                }
+              });
           }
         }
       })
@@ -333,6 +373,7 @@ Page({
         fillblankContent:'',
         isdisabled:false,
         bordercolor:'',
+        loadhidden:'hidden'
       });
       if(this.data.count==this.data.questions.length){
         // 结束一章答题，机会--，最后一次机会记录
