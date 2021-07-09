@@ -6,7 +6,8 @@
     "pages/pkprepare/pkprepare",
     "pages/pk/pk",
     "pages/record/record",
-    "pages/questions/questions"
+    "pages/questions/questions",
+    "pages/finishscore/finishscore"
   ],
   "window": {
     "backgroundColor": "#FFFFFF",

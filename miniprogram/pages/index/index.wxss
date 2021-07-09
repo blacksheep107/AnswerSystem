@@ -42,8 +42,7 @@ page{
     font-weight: bold;
     font-size: x-large;
     color: #EFEFEF;
-    background-color: #185ADB;
-    box-shadow: 19rpx 21rpx 28rpx #c5c5c5;
+    background-image: linear-gradient(to bottom right, #78C4D4, #7868E6);    box-shadow: 19rpx 21rpx 28rpx #c5c5c5;
     border-radius: 10rpx;
     width: 400rpx;
     align-self: center;
@@ -81,7 +80,7 @@ page{
   border-radius: 10rpx;
   width: 400rpx;
   align-self: center;
-  background-color: #F7BE16;
+  background-image: linear-gradient(to bottom right,#ffce86,#EEB76B,#efbe2d);
   /* animation-name: example;
   animation-duration: 4s;
   animation-iteration-count: infinite; */
@@ -96,7 +95,7 @@ page{
   border-radius: 10rpx;
   width: 400rpx;
   align-self: center;
-  background-color: #70416D;
+  background-image: linear-gradient(to right bottom, #7868E6, #70416D);
 }
 .robot{
   width: 200rpx;
@@ -155,9 +154,11 @@ page{
   padding: 0 20px 0;
   margin: 30px 0;
   line-height: 1px;
-  border-left: 140px solid darkblue;
-  border-right: 140px solid darkblue;
+  /* border-left: 140px solid darkblue; */
+  /* border-right: 140px solid darkblue; */
   text-align: center;
   color: darkblue;
   font-weight: 300;
+  border-bottom: thin dotted;
+  padding-bottom: 30rpx;
 }

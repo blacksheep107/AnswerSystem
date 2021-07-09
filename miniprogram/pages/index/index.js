@@ -6,6 +6,7 @@ const pk=db.collection('pk');
 const easy=db.collection('easy_question');
 const medium=db.collection('medium_question');
 const hard=db.collection('hard_question');
+const questions=db.collection('questions');
 
 Page({
   data: {
@@ -83,6 +84,11 @@ Page({
       url: '../record/record',
     });
   },
+  sign(){
+    wx.showToast({
+      title: '打卡成功',
+    });
+  },
   createRoom(){
     console.log(app.globalData.pkquestions);
     pk.add({
@@ -108,36 +114,13 @@ Page({
   getQuestions(){
     return new Promise((resolve1)=>{
       let all=[];
-      // pk题目随机从三个库里取，只取单选吧
-      new Promise((resolve2)=>{
-        easy.where({
-          type:'choose',
-          choosenum:'1',
-        }).get().then(res=>{
-          all=all.concat(res.data);
-          resolve2();
-        });      
-      }).then(()=>{
-        new Promise((resolve3)=>{
-          medium.where({
-            type:'choose',
-            choosenum:'1',
-          }).get().then(res=>{
-            all=all.concat(res.data);
-            resolve3();
-          });
-        }).then(()=>{
-          hard.where({
-            type:'choose',
-            choosenum:'1',
-          }).get().then(res=>{
-            all=all.concat(res.data);
-            console.log(all);
-            app.globalData.allchoosequestions=all;
-            resolve1();
-          });
-        })
-      })      
+      questions.where({
+        type:'choose',
+        choosenum:1,
+      }).get().then(res=>{
+        app.globalData.allchoosequestions=res.data;
+        resolve1();
+      })
     })
   },
   getRandomQuestions(){
@@ -151,7 +134,7 @@ Page({
           let arr=[],count=0;
           new Promise((resolve1)=>{
             for(let i=0;i<5;i++){
-              let x=Math.floor(Math.random*app.globalData.allchoosequestions.length);
+              let x=Math.floor(Math.random()*app.globalData.allchoosequestions.length);
               if(arr.indexOf(x)!=-1){
                 i--;
                 continue;

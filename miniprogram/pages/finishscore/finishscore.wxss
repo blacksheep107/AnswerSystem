@@ -1,0 +1,76 @@
+/* miniprogram/pages/finishscore/finishscore.wxss */
+page{
+  background-color: #d8e3e7;
+}
+.view{
+  display: flex;
+  flex-direction: column;
+  font-size: x-large;
+  align-items: center;
+  margin-top: 20rpx;
+}
+.t1{
+  color: gray;
+  font-size: xx-large;
+  font-family: fantasy;
+  margin-top: 20rpx;
+}
+.t2{
+  color: darkolivegreen;
+  font-family: monospace;
+  font-size: 40rpx;
+  margin-top: 20rpx;
+}
+.t3{
+  margin-top: 40rpx;
+  color: darkred;
+  font-weight: 800;
+  box-shadow: 10rpx 10rpx 14rpx #c0c0c0;
+  padding: 20rpx 40rpx;
+  border-radius: 20rpx;
+}
+.score{
+  color: orangered;
+  font-size: 90rpx;
+  font-family: fantasy;
+}
+.t22{
+  color: darkolivegreen;
+  font-family: monospace;
+  font-size: 50rpx;
+  margin-top: 20rpx;
+  font-weight: 900;
+}
+.line{
+  border-bottom: 2rpx solid #c0c0c0;
+  width: -webkit-fill-available;
+  margin-top: 40rpx;
+}
+.t4{
+  color: grey;
+  font-family: cursive;
+  margin-top: 40rpx;
+  font-size: x-large;
+  font-weight: 700;
+}
+.bottom{
+  display: flex;
+  align-self: center;
+  flex-direction: row;
+}
+.t5{
+  margin-top: 20rpx;
+  font-size: 38rpx;
+  color: grey;
+  font-weight: 600;
+}
+.b1{
+  background: cadetblue;
+  color: white;
+  border-radius: 8rpx;
+  margin: 20rpx;
+  margin-top: 80rpx;
+  font-size: larger;
+  font-weight: 700;
+  padding: 20rpx;
+}

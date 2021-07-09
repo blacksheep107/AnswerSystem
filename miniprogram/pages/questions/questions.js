@@ -35,6 +35,9 @@ Page({
     rightArr:[],  // 本次答对的问题id
     score:0,  // 本次答题分数
     blankcontents:{}, // 填空题多个答案
+    easywrong:0,
+    mediumwrong:0,
+    hardwrong:0,
   },
   finishUnit(){
     wx.showModal({
@@ -54,7 +57,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    console.log(options);
     this.setData({
       loadhidden:'',
       unitname:options.unitname
@@ -156,6 +158,13 @@ Page({
               loadhidden:'hidden'
               // ishidden:''
             });
+            if(this.data.questions[this.data.count].level=='easy'){
+              this.data.easywrong++;
+            }else if(this.data.questions[this.data.count].level=='medium'){
+              this.data.mediumwrong++;
+            }else{
+              this.data.hardwrong++;
+            }
           }
         }else if(this.data.questions[this.data.count].choosenum>'1'){
           // 多选
@@ -191,6 +200,13 @@ Page({
                 loadhidden:'hidden'
                 // ishidden:''
               });
+              if(this.data.questions[this.data.count].level=='easy'){
+                this.data.easywrong++;
+              }else if(this.data.questions[this.data.count].level=='medium'){
+                this.data.mediumwrong++;
+              }else{
+                this.data.hardwrong++;
+              }
             }
           }else if(this.data.questions[this.data.count].isorder&&this.data.questions[this.data.count].answer.toString()==this.data.myanswer.toString()){
             // 按序
@@ -208,6 +224,13 @@ Page({
               loadhidden:'hidden'
               // ishidden:''
             });
+            if(this.data.questions[this.data.count].level=='easy'){
+              this.data.easywrong++;
+            }else if(this.data.questions[this.data.count].level=='medium'){
+              this.data.mediumwrong++;
+            }else{
+              this.data.hardwrong++;
+            }
           }
         }
       }else if(this.data.questions[this.data.count].type=='fillblank'){
@@ -232,6 +255,13 @@ Page({
             loadhidden:'hidden'
             // ishidden:''
           });
+          if(this.data.questions[this.data.count].level=='easy'){
+            this.data.easywrong++;
+          }else if(this.data.questions[this.data.count].level=='medium'){
+            this.data.mediumwrong++;
+          }else{
+            this.data.hardwrong++;
+          }
         }
       }
       this.setData({
@@ -249,7 +279,7 @@ Page({
               flag=true;
               // 做过这题，之前错了现在对了才改，之前对了就不改
               // 否则会刷分
-              if(!old[i].isRight){
+              if(!olddid[i].isRight){
                 olddid[i]={
                   studentid:app.globalData.studentid,
                   studentname:app.globalData.name,
@@ -361,6 +391,7 @@ Page({
                   score:score
                 }
               });
+
           }
         }
       })
@@ -393,7 +424,10 @@ Page({
                   showCancel:false,
                   success:res=>{
                     if(res.confirm){
-                      wx.navigateBack();
+                      wx.navigateTo({
+                        url: '../finishscore/finishscore?unit='+this.data.unitname+'&&easywrong='+this.data.easywrong
+                        +'&&mediumwrong='+this.data.mediumwrong+'&&hardwrong='+this.data.hardwrong,
+                      });
                     }
                   }
                 })

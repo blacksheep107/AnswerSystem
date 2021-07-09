@@ -1,4 +1,5 @@
 <!--miniprogram/pages/register/register.wxml-->
+<loading hidden="{{loadhidden}}">注册中</loading>
 <view>
   <form class="form">
     <view class="info">

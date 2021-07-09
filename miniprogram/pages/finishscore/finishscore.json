@@ -1,9 +1,8 @@
 {
-  "usingComponents": {
-  },
+  "usingComponents": {},
   "backgroundColor": "#d8e3e7",
   "backgroundTextStyle": "dark",
   "navigationBarBackgroundColor": "#d8e3e7",
-  "navigationBarTitleText": "Super AI",
+  "navigationBarTitleText": "分数结算",
   "navigationBarTextStyle": "black"
 }

@@ -3,6 +3,7 @@ const db=wx.cloud.database();
 const users=db.collection('users');
 const app=getApp();
 const classcollection=db.collection('class');
+const _=db.command;
 Page({
 
   /**
@@ -12,6 +13,7 @@ Page({
     studentid:"",
     name:"",
     classid:"",
+    loadhidden:'hidden'
   },
   studentidinput(e){
     this.setData({
@@ -30,6 +32,9 @@ Page({
   },
   registerClick(){
     // 提交
+    this.setData({
+      loadhidden:''
+    });
     console.log(this.data);
     classcollection.where({
       classid:this.data.classid
@@ -37,10 +42,20 @@ Page({
       success:res=>{
         console.log(res);
         if(res.data.length==0){
+          this.setData({
+            loadhidden:'hidden'
+          });
           wx.showModal({
             title:'提示',
             content:'没有此班级编号！',
-            showCancel:false
+            showCancel:false,
+            success:res=>{
+              if(res.confirm){
+                wx.navigateBack({
+                  delta: 0,
+                });
+              }
+            }
           });
         }else{
           users.add({
@@ -52,28 +67,42 @@ Page({
               answeredquestions:[], // 回答过的问题
               score:{}, // 每章节分数
             },
-            success:res=>{
-              console.log(res);
-              wx.showModal({
-                title:'提示',
-                content:'注册成功',
-                showCancel:false,
-                success:res=>{
-                  console.log(res);
-                  if(res.confirm){
-                    wx.navigateBack({
-                      delta: 0,
-                    });
-                  }
+            success:res1=>{
+              // 写入班级学生
+              classcollection.doc(res.data[0]._id).update({
+                data:{
+                  students:_.push(this.data.studentid)
+                },
+                success:res2=>{
+                  console.log(res2);
+                  this.setData({
+                    loadhidden:'hidden'
+                  });
+                  wx.showModal({
+                    title:'提示',
+                    content:'注册成功',
+                    showCancel:false,
+                    success:res=>{
+                      console.log(res);
+                      if(res.confirm){
+                        wx.navigateBack({
+                          delta: 0,
+                        });
+                      }
+                    },
+                    fail:res2=>{
+                      console.log(res2);
+                    }
+                  });
+                  this.globalData.name=this.data.name;
+                  this.globalData.studentid=this.data.studentid;
+                  this.globalData.id=res._id; // 数据库索引
+                  this.globalData.classid=this.data.classid;  // 班级                  
                 },
                 fail:res=>{
                   console.log(res);
                 }
-              });
-              this.globalData.name=this.data.name;
-              this.globalData.studentid=this.data.studentid;
-              this.globalData.id=res._id; // 数据库索引
-              this.globalData.classid=this.data.classid;  // 班级
+              })
             },
           })          
         }

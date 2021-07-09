@@ -119,20 +119,16 @@ button{
   color: green;
 }
 .saying{
-  position: absolute;
-  bottom: 20rpx;
-  color: #c0c0c0;
-}
-.saying{
-  padding: 0 20px 0;
+  padding: 32rpx 20rpx 0;
   margin: 30px 0;
   line-height: 1px;
-  border-left: 50px solid darkgrey;
-  border-right: 50px solid darkgrey;
+  /* border-left: 50px solid darkgrey; */
+  /* border-right: 50px solid darkgrey; */
   text-align: center;
   color: dimgray;
   font-weight: 300;
   position: relative;
+  border-top: 1px solid #c0c0c0;
 }
 .boat{
   position: absolute;
