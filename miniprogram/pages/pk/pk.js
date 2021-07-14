@@ -18,6 +18,7 @@ Page({
     leftwin:'hidden',
     rightwin:'hidden',
     background:'',
+    fontcolor:'',
     leftpoint:0,
     rightpoint:0,
     isover:'',
@@ -35,15 +36,8 @@ Page({
       avatarUrl:'',
       nickName:'',
     },
-  },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  answerchange(e){
-    this.setData({
-      answer:e.detail.value
-    })
+    canIAnswer:'chooseanswer',
+    counthidden:'',
   },
   submitanswer(e){
     let answer=this.data.answer;
@@ -58,8 +52,10 @@ Page({
           success:res=>{
             this.setData({
               leftisTrue:'', // 显示正确
-              background:'1px solid green',
+              background:'#4BC356',
+              fontcolor:'white',
               leftpoint:this.data.leftpoint+addPoint,
+              canIAnswer:'' // 取消绑定函数，防止重复答题
             });
           }
         })
@@ -71,8 +67,10 @@ Page({
           success:res=>{
             this.setData({
               rightisTrue:'', // 显示正确
-              background:'1px solid green',
+              background:'#4BC356',
+              fontcolor:'white',
               rightpoint:this.data.rightpoint+addPoint,
+              canIAnswer:'' // 取消绑定函数，防止重复答题
             });
           }
         })
@@ -82,12 +80,16 @@ Page({
       if(answer==this.data.questions[this.data.count].answer){
         this.setData({
           leftisFalse:'',
-          background:'1px solid red',
+          background:'#BB5242',
+          color:'white',
+          canIAnswer:'' // 取消绑定函数，防止重复答题
         });
       }else{
         this.setData({
           rightisFalse:'',
-          background:'1px solid red',
+          background:'#BB5242',
+          color:'white',
+          canIAnswer:'' // 取消绑定函数，防止重复答题
         });
       }
     }
@@ -101,6 +103,7 @@ Page({
         count:that.data.count+1,
         answer:'',
         background:'',
+        canIAnswer:'chooseanswer' // 添加绑定函数，继续答题
       });
     },2000);
     if(this.data.count==this.data.questions.length-1){
@@ -117,7 +120,8 @@ Page({
     console.log(e);
     let answer=e.currentTarget.dataset.value;
     this.setData({
-      answer:answer
+      answer:answer,
+      canIAnswer:'',  // 取消监听函数，防止重复答题
     });
     if(answer==this.data.questions[this.data.count].answer){
       // 对，分数变化双方都要看到
@@ -130,7 +134,8 @@ Page({
           success:res=>{
             this.setData({
               leftisTrue:'', // 显示正确
-              background:'1px solid green',
+              background:'#4BC356',
+              fontcolor:'white',
             });
           }
         })
@@ -142,7 +147,8 @@ Page({
           success:res=>{
             this.setData({
               rightisTrue:'', // 显示正确
-              background:'1px solid green',
+              background:'#4BC356',
+              fontcolor:'white',
             });
           }
         })
@@ -152,12 +158,14 @@ Page({
       if(answer==this.data.questions[this.data.count].answer){
         this.setData({
           leftisFalse:'',
-          background:'1px solid red',
+          background:'#BB5242',
+          color:'white',
         });
       }else{
         this.setData({
           rightisFalse:'',
-          background:'1px solid red',
+          background:'#BB5242',
+          color:'white',
         });
       }
     }
@@ -183,6 +191,7 @@ Page({
         }
       })
     }
+    var that=this;
     setTimeout(function(){
       that.setData({
         rightisTrue:'hidden',
@@ -192,9 +201,22 @@ Page({
         count:that.data.count+1,
         answer:'',
         background:'',
+        canIAnswer:'chooseanswer',
       });
+      if(that.data.count<that.data.questions.length-1)  that.showCount();
     },2000);
-    console.log(this.data.count);
+  },
+  // 显示第几题
+  showCount(){
+    this.setData({
+      counthidden:''
+    });
+    var that=this;
+    setTimeout(function(){
+      that.setData({
+        counthidden:'hidden'
+      })
+    },1500);
   },
   calPoints(){
     let leftpoint=this.data.leftpoint;
@@ -230,6 +252,12 @@ Page({
     return new Promise(resolve=>setTimeout(callback,time));
   },
   onLoad: function (options) {
+    var that=this;
+    setTimeout(function(){
+      that.setData({
+        counthidden:'hidden'
+      });
+    },1500);
     watchpoint=pk.doc(options.roomid).watch({
       onChange:snapshot=>{
         console.log(snapshot);

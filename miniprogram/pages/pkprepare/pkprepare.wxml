@@ -18,7 +18,8 @@
   </view>
 </view>
 <view class="back">
-  <view class="blue"></view>
-  <view class="pink"></view>  
+  <view class="allblue"></view>
+  <!-- <view class="blue"></view>
+  <view class="pink"></view>   -->
 </view>
 

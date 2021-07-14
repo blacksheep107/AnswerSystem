@@ -21,22 +21,17 @@
         <text>{{questions[count].content}}</text>
       </view>
       <view class="answer">
-        <view wx:for="{{questions[count].choosecontent}}" class="chooseone" style="border:{{item.value==answer?background:''}};">
-          <view bindtap="chooseanswer" data-value='{{item.value}}'>
+        <view wx:for="{{questions[count].choosecontent}}" class="chooseone" style="background:{{item.value==answer?background:''}};color:{{item.value==answer?fontcolor:''}}">
+          <view bindtap="{{canIAnswer}}" data-value='{{item.value}}'>
             <text>{{item.content}}</text>
           </view>
         </view>
-        <!-- <radio-group class="radiogroup" bindchange="answerchange">
-          <label class="label" wx:for="{{questions[count].choosecontent}}" style="background:{{item.value==questions[count].answer?background:''}};">
-            <radio value="{{item.value}}" checked="{{''}}"/>
-            {{item.content}}
-          </label>
-        </radio-group>
-        <button class="nextQ" bindtap="submitanswer">确定</button> -->
       </view>
     </view>
 </view>
 <view class="back">
-  <view class="blue"></view>
-  <view class="pink"></view>  
+  <view class="allblue"></view>
+  <!-- <view class="blue"></view>
+  <view class="pink"></view>   -->
 </view>
+<view class="floatCount" hidden="{{counthidden}}">第 {{count+1}} 题</view>

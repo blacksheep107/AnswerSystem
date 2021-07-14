@@ -127,7 +127,7 @@ Page({
     return new Promise((resolve)=>{
       this.getQuestions().then(()=>{
         // 5题
-        if(app.globalData.allchoosequestions.length<=5){
+        if(app.globalData.allchoosequestions.length<5){
           app.globalData.pkquestions=app.globalData.allchoosequestions;
           resolve();
         }else{
