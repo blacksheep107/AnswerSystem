@@ -81,6 +81,8 @@
 }
 .question{
   margin-bottom: 20rpx;
+  display: flex;
+  flex-direction: column;
 }
 .label{
   margin: 20rpx;
@@ -93,15 +95,12 @@
   position: absolute;
 }
 .draw{
-  /* width: 280rpx;
-  height: 210rpx; */
-  z-index: -100;
-  position: absolute;
-  margin: auto;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
+  z-index: 999;
+  align-self: center;
+  animation-name: outToIn;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+  transform: scale(0.9);
 }
 .back{
   z-index: -1000;
@@ -139,6 +138,14 @@
     bottom: 300rpx;
   }
 }
+@keyframes outToIn{
+  from{
+    opacity: 0;
+  }
+  to{
+    opacity: 1;
+  }
+}
 .floatCount{
   position: absolute;
   z-index: 999;
@@ -157,4 +164,46 @@
   animation-name: bottomTotop;
   animation-duration: 1s;
   animation-fill-mode: forwards;
+}
+.cover{
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: rgba(0, 0, 0, 0.4);
+  width: 100%;
+  height: 100%;
+  opacity: 0.6;
+  z-index: 998;
+}
+.winner{
+  z-index: 999;
+  align-self: center;
+  animation-name: outToIn;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+  transform: scale(0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 60rpx;
+  font-weight: 900;
+  color: gold;
+}
+.loser{
+  z-index: 999;
+  align-self: center;
+  animation-name: outToIn;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+  transform: scale(0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 60rpx;
+  font-weight: 900;
+  color: darkslategray;
+}
+.limg{
+  width: 500rpx;
+  height: 500rpx;
 }

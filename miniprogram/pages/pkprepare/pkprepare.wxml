@@ -11,10 +11,10 @@
       <text class="righttext">{{rightdata.nickName}}</text>
     </view>
   </view>
-  <view class="button">
-    <button hidden="{{sbuttonhide}}" open-type="share">分享给好友</button>
-    <button hidden="{{pbuttonishide}}" bindtap="getUserProfile">准备</button>
-    <button hidden="{{ownerbegin}}" bindtap="beginpk">开始PK</button>      
+  <view>
+    <button hidden="{{sbuttonhide}}" open-type="share" class="btn-11">分享给好友</button>
+    <button hidden="{{pbuttonishide}}" bindtap="getUserProfile" class="btn-11">准备</button>
+    <button hidden="{{ownerbegin}}" bindtap="beginpk" class="btn-11">开始PK</button>      
   </view>
 </view>
 <view class="back">

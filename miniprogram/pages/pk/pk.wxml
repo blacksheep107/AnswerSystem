@@ -5,20 +5,20 @@
     <view class="left">
       <image class="leftavatar" src="{{leftdata.avatarUrl}}"></image>
       <text class="lefttext">{{leftdata.nickName}}</text>
-      <image src="win.png" hidden="{{leftwin}}" class="win"></image>
+      <!-- <image src="win.png" hidden="{{leftwin}}" class="win"></image> -->
       <text class="point" >{{leftpoint}}</text>
     </view>
     <view class="right">
       <image class="rightavatar" src="{{rightdata.avatarUrl}}"></image>
       <text class="righttext">{{rightdata.nickName}}</text>
-      <image src="win.png" hidden="{{rightwin}}" class="win"></image>
+      <!-- <image src="win.png" hidden="{{rightwin}}" class="win"></image> -->
       <text class="point">{{rightpoint}}</text>
     </view>
-    <image src="draw.png" hidden="{{draw}}" class="draw"></image>
   </view>
   <view class="questions" hidden="{{isover}}">
       <view class="question">
         <text>{{questions[count].content}}</text>
+        <image wx:if="{{questions[count].pictures}}" src="{{questions[count].pictures}}" />
       </view>
       <view class="answer">
         <view wx:for="{{questions[count].choosecontent}}" class="chooseone" style="background:{{item.value==answer?background:''}};color:{{item.value==answer?fontcolor:''}}">
@@ -34,4 +34,17 @@
   <!-- <view class="blue"></view>
   <view class="pink"></view>   -->
 </view>
+
+<view class="cover" hidden="{{coverhidden}}"></view>
+
+<image src="draw.png" hidden="{{draw}}" class="draw"></image>
+<view class="winner" hidden="{{winnerhidden}}">
+  <image class="winner" hidden="{{winnerhidden}}" src="https://667a-fzuanswersystem-7g3gmzjw761ecfdb-1305763704.tcb.qcloud.la/%E5%A5%96%E6%9D%AF.png?sign=7d10026399a7dccf8a9a92d0dd39fd10&t=1626311532" />
+  <text>WINNER</text>
+</view>
+<view class="loser" hidden="{{loserhidden}}">
+  <image hidden="{{loserhidden}}" class="limg" src="https://667a-fzuanswersystem-7g3gmzjw761ecfdb-1305763704.tcb.qcloud.la/%E5%A4%B1%E8%B4%A5.png?sign=620f451f6f54ef91c8a99e28eb323210&t=1626311555" />
+  <text>LOSE</text>
+</view>
+
 <view class="floatCount" hidden="{{counthidden}}">第 {{count+1}} 题</view>

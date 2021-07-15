@@ -38,86 +38,11 @@ Page({
     },
     canIAnswer:'chooseanswer',
     counthidden:'',
-  },
-  submitanswer(e){
-    let answer=this.data.answer;
-    if(answer==this.data.questions[this.data.count].answer){
-      // 对，分数变化双方都要看到
-      if(this.data.ownerid==app.globalData.openid){
-        // 房主,left
-        pk.doc(this.data.roomid).update({
-          data:{
-            leftpoint:_.inc(addPoint),
-          },
-          success:res=>{
-            this.setData({
-              leftisTrue:'', // 显示正确
-              background:'#4BC356',
-              fontcolor:'white',
-              leftpoint:this.data.leftpoint+addPoint,
-              canIAnswer:'' // 取消绑定函数，防止重复答题
-            });
-          }
-        })
-      }else{
-        pk.doc(this.data.roomid).update({
-          data:{
-            rightpoint:_.inc(addPoint),
-          },
-          success:res=>{
-            this.setData({
-              rightisTrue:'', // 显示正确
-              background:'#4BC356',
-              fontcolor:'white',
-              rightpoint:this.data.rightpoint+addPoint,
-              canIAnswer:'' // 取消绑定函数，防止重复答题
-            });
-          }
-        })
-      }
-    }else{
-      // 错
-      if(answer==this.data.questions[this.data.count].answer){
-        this.setData({
-          leftisFalse:'',
-          background:'#BB5242',
-          color:'white',
-          canIAnswer:'' // 取消绑定函数，防止重复答题
-        });
-      }else{
-        this.setData({
-          rightisFalse:'',
-          background:'#BB5242',
-          color:'white',
-          canIAnswer:'' // 取消绑定函数，防止重复答题
-        });
-      }
-    }
-    var that=this;
-    setTimeout(function(){
-      that.setData({
-        rightisTrue:'hidden',
-        rightisFalse:'hidden',
-        leftisFalse:'hidden',
-        leftisTrue:'hidden',
-        count:that.data.count+1,
-        answer:'',
-        background:'',
-        canIAnswer:'chooseanswer' // 添加绑定函数，继续答题
-      });
-    },2000);
-    if(this.data.count==this.data.questions.length-1){
-      this.setData({
-        loadhidden:'',
-        isover:'hidden',
-      });
-      // 结算
-      this.calPoints();
-    }
-
+    winnerhidden:'hidden',
+    loserhidden:'hidden',
+    coverhidden:'hidden',
   },
   chooseanswer(e){
-    console.log(e);
     let answer=e.currentTarget.dataset.value;
     this.setData({
       answer:answer,
@@ -171,17 +96,7 @@ Page({
     }
     var that=this;
     if(this.data.count==this.data.questions.length-1){
-      that.setData({
-        rightisTrue:'hidden',
-        rightisFalse:'hidden',
-        leftisFalse:'hidden',
-        leftisTrue:'hidden',
-        count:that.data.count+1,
-        answer:'',
-        background:'',
-        loadhidden:'',
-        isover:'hidden',
-      });
+      var that=this;
       pk.doc(this.data.roomid).update({
         data:{
           finish:_.inc(1)
@@ -190,6 +105,19 @@ Page({
           console.log(res);
         }
       })
+      setTimeout(function(){
+        that.setData({
+          rightisTrue:'hidden',
+          rightisFalse:'hidden',
+          leftisFalse:'hidden',
+          leftisTrue:'hidden',
+          count:that.data.count+1,
+          answer:'',
+          background:'',
+          loadhidden:'hidden',
+          isover:'hidden',
+        });
+      },2000);
     }
     var that=this;
     setTimeout(function(){
@@ -219,6 +147,11 @@ Page({
     },1500);
   },
   calPoints(){
+    this.setData({
+      coverhidden:'',
+      loadhidden:'hidden',
+      isover:'hidden',
+    });
     let leftpoint=this.data.leftpoint;
     let rightpoint=this.data.rightpoint;
     if(leftpoint>rightpoint){
@@ -228,24 +161,48 @@ Page({
     }else{
       this.showDraw();
     }    
+  },
+  showLeftWin(){
+    // 房主赢
     this.setData({
       loadhidden:'hidden'
     });
-  },
-  showLeftWin(){
-    this.setData({
-      leftwin:''
-    });
+    if(app.globalData.openid==this.data.ownerid){
+      // 房主是左边
+      this.setData({
+        winnerhidden:'',
+        loserhidden:'hidden',
+      });      
+    }else{
+      // 右边
+      this.setData({
+        winnerhidden:'hidden',
+        loserhidden:'',
+      });
+    }
   },
   showRightWin(){
+    // 房主输
     this.setData({
-      rightwin:''
+      loadhidden:'hidden'
     });
+    if(app.globalData.openid==this.data.ownerid){
+      this.setData({
+        winnerhidden:'hidden',
+        loserhidden:'',
+      });      
+    }else{
+      this.setData({
+        winnerhidden:'',
+        loserhidden:'hidden',
+      });
+    }
   },
   showDraw(){
     // 平
     this.setData({
-      draw:''
+      draw:'',
+      loadhidden:'hidden'
     });
   },
   sleep(time,callback){
@@ -292,53 +249,4 @@ Page({
       }
     });
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  }
 })
