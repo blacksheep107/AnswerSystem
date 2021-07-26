@@ -3,6 +3,7 @@ const app = getApp()
 const db=wx.cloud.database();
 const users=db.collection('users');
 const pk=db.collection('pk');
+const pk4=db.collection('pk4');
 const easy=db.collection('easy_question');
 const medium=db.collection('medium_question');
 const hard=db.collection('hard_question');
@@ -84,6 +85,46 @@ Page({
       url: '../record/record',
     });
   },
+  naviToPk4(){
+    wx.getUserProfile({
+      desc: '展示用户信息', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
+      success: (res) => {
+        console.log(res);
+        app.globalData.userInfo=res.userInfo;
+        this.getRandomQuestions().then(()=>{
+          console.log(app.globalData.pkquestions);
+          this.createRoom4();
+        });
+      }
+    })
+  },
+  createRoom4(){
+    console.log(app.globalData.pkquestions);
+    pk4.add({
+      data:{
+        ownerid:app.globalData.openid,
+        status:'prepare',
+        data1:{
+          avatarUrl:app.globalData.userInfo.avatarUrl,
+          nickName:app.globalData.userInfo.nickName,
+          openid:app.globalData.openid,
+        },
+        questions:app.globalData.pkquestions,
+        finish:0,
+      },
+      success:res=>{
+        console.log(res);
+        wx.navigateTo({
+          url: '../pk4prepare/pk4prepare?ownerid='+app.globalData.openid+'&&roomid='+res._id+'&&gametype=own',
+        });
+      }
+    });
+  },
+  naviToFeedback(){
+    wx.navigateTo({
+      url: '../feedback/feedback',
+    })
+  },
   sign(){
     wx.showToast({
       title: '打卡成功',
@@ -113,7 +154,6 @@ Page({
   },
   getQuestions(){
     return new Promise((resolve1)=>{
-      let all=[];
       questions.where({
         type:'choose',
         choosenum:1,

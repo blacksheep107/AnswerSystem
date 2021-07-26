@@ -7,7 +7,9 @@
     "pages/pk/pk",
     "pages/record/record",
     "pages/questions/questions",
-    "pages/finishscore/finishscore"
+    "pages/finishscore/finishscore",
+    "pages/feedback/feedback",
+    "pages/pk4prepare/pk4prepare"
   ],
   "window": {
     "backgroundColor": "#FFFFFF",

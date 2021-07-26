@@ -37,7 +37,7 @@ page{
   align-content: center; */
 }
 .pk{
-    margin: 50rpx;
+    margin: 30rpx;
     text-align: center;
     font-weight: bold;
     font-size: x-large;
@@ -46,6 +46,17 @@ page{
     border-radius: 10rpx;
     width: 400rpx;
     align-self: center;
+}
+.pk4{
+  margin: 30rpx;
+  text-align: center;
+  font-weight: bold;
+  font-size: x-large;
+  color: #EFEFEF;
+  background-image:  linear-gradient(to bottom right, #ABC253,#5ECB8A) ; box-shadow: 19rpx 21rpx 28rpx #c5c5c5;
+  border-radius: 10rpx;
+  width: 400rpx;
+  align-self: center;
 }
 .text{
   height: 100rpx;
@@ -71,7 +82,7 @@ page{
   align-items: flex-start;
 }
 .b1{
-  margin: 50rpx;
+  margin: 30rpx;
   text-align: center;
   font-weight: bold;
   font-size: x-large;
@@ -86,7 +97,7 @@ page{
   animation-iteration-count: infinite; */
 }
 .b2{
-  margin: 50rpx;
+  margin: 30rpx;
   text-align: center;
   font-weight: bold;
   font-size: x-large;

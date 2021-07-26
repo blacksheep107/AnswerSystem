@@ -1,0 +1,12 @@
+<!--miniprogram/pages/feedback/feedback.wxml-->
+<view>
+  <form class="form">
+    <view class="info">
+      <label for="fcontent">反馈内容：</label>
+      <view class="line"></view>
+      <textarea value="{{content}}" id="fcontent" placeholder="请输入" bindinput="contentChange" />      
+    </view>
+    <view class="line"></view>
+    <button bindtap="submitFeedback" class="button">提交</button>
+  </form>
+</view>

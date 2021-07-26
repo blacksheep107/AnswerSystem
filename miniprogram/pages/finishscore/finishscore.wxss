@@ -9,6 +9,17 @@ page{
   align-items: center;
   margin-top: 20rpx;
 }
+.nameAndscore{
+  display: flex;
+  flex-direction: column;
+  font-size: x-large;
+  align-items: center;
+  margin-top: 20rpx;
+  background: white;
+  padding: 20rpx 120rpx;
+  border-radius: 10rpx;
+  box-shadow: 10rpx 10rpx 14rpx #c0c0c0;
+}
 .t1{
   color: gray;
   font-size: xx-large;
@@ -16,16 +27,15 @@ page{
   margin-top: 20rpx;
 }
 .t2{
-  color: darkolivegreen;
+  color: gray;
   font-family: monospace;
-  font-size: 40rpx;
+  font-size: 30rpx;
   margin-top: 20rpx;
 }
 .t3{
-  margin-top: 40rpx;
-  color: darkred;
+  color: #13227a;
   font-weight: 800;
-  box-shadow: 10rpx 10rpx 14rpx #c0c0c0;
+  /* box-shadow: 10rpx 10rpx 14rpx #c0c0c0; */
   padding: 20rpx 40rpx;
   border-radius: 20rpx;
 }
@@ -34,12 +44,26 @@ page{
   font-size: 90rpx;
   font-family: fantasy;
 }
+.wimg{
+  height: 60rpx;
+  width: 60rpx;
+  border-radius: 50%;
+  padding: 10rpx;
+  background: aliceblue;
+  box-shadow: 4rpx 4rpx 14rpx gray;
+}
 .t22{
-  color: darkolivegreen;
+  color: gray;
   font-family: monospace;
   font-size: 50rpx;
   margin-top: 20rpx;
   font-weight: 900;
+}
+.wtitle{
+  margin-top: 40rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 .line{
   border-bottom: 2rpx solid #c0c0c0;
@@ -47,7 +71,7 @@ page{
   margin-top: 40rpx;
 }
 .t4{
-  color: grey;
+  color: #13227a;
   font-family: cursive;
   margin-top: 40rpx;
   font-size: x-large;
@@ -61,7 +85,7 @@ page{
 .t5{
   margin-top: 20rpx;
   font-size: 38rpx;
-  color: grey;
+  color: orangered;
   font-weight: 600;
 }
 .b1{
@@ -73,4 +97,47 @@ page{
   font-size: larger;
   font-weight: 700;
   padding: 20rpx;
+}
+.allwq{
+  margin-top: 20rpx;
+  font-size: 30rpx;
+}
+.wrongBlock{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: white;
+  padding: 20rpx 120rpx;
+  border-radius: 10rpx;
+  box-shadow: 10rpx 10rpx 14rpx #c0c0c0;
+}
+.celeimg1{
+  height: 100rpx;
+  width: 100rpx;
+  z-index: 999;
+}
+.celeimg2{
+  height: 100rpx;
+  width: 100rpx;
+  transform: rotateY(180deg);
+  z-index: 999;
+}
+.celeline{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: -webkit-fill-available;
+  align-items: center;
+}
+.saying{
+  padding: 32rpx 20rpx 0;
+  margin: 30px 0;
+  line-height: 1px;
+  text-align: center;
+  color: dimgray;
+  font-weight: 300;
+  position: relative;
+  border-top: 1px solid #c0c0c0;
+  font-size: 30rpx;
+  width: -webkit-fill-available;
 }

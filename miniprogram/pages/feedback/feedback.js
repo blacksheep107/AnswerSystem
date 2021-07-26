@@ -1,42 +1,22 @@
-// miniprogram/pages/finishscore/finishscore.js
-const app=getApp();
+// miniprogram/pages/feedback/feedback.js
+const db=wx.cloud.database();
+const feedback=db.collection('feedback');
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    name:app.globalData.name,
-    studentid:app.globalData.studentid,
-    unit:null,
-    easyw:0,
-    mediumw:0,
-    hardw:0
+    content:'',
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.setData({
-      unit:options.unit,
-      easyw:options.easywrong,
-      mediumw:options.mediumwrong,
-      hardw:options.hardwrong,
-      name:app.globalData.name,
-      studentid:app.globalData.studentid
-    });
+
   },
-  jmpToRecord:function(){
-    wx.navigateTo({
-      url: '../record/record',
-    })
-  },
-  jmpToAn(){
-    wx.navigateTo({
-      url: '../answer/answer',
-    });
-  },
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -50,7 +30,30 @@ Page({
   onShow: function () {
 
   },
-
+  contentChange(e){
+    this.setData({
+      content:e.detail.value
+    });
+  },
+  submitFeedback(){
+    feedback.add({
+      data:{
+        feedbackContent:this.data.content
+      },
+      success:res=>{
+        wx.showModal({
+          title:'提示',
+          content:'反馈成功',
+          showCancel:false,
+          success:res=>{
+            if(res.confirm){
+              wx.navigateBack();
+            }
+          }
+        });
+      }
+    });
+  },
   /**
    * 生命周期函数--监听页面隐藏
    */

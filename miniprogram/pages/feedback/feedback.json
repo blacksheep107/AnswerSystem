@@ -1,0 +1,9 @@
+{
+  "usingComponents": {
+  },
+  "backgroundColor": "#d8e3e7",
+  "backgroundTextStyle": "dark",
+  "navigationBarBackgroundColor": "#d8e3e7",
+  "navigationBarTitleText": "反馈",
+  "navigationBarTextStyle": "black"
+}

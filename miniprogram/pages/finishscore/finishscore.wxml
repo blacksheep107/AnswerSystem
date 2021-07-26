@@ -1,19 +1,36 @@
 <!--miniprogram/pages/finishscore/finishscore.wxml-->
 <view class="view">
-  <text class="t5">{{name}} {{studentid}}</text> 
+  <view class="nameAndscore">
+    <text class="t5">{{name}} {{studentid}}</text> 
+    <view class="line"></view>
+    <text class="t1">{{unit}}</text>
+    <text class="t2">总分：8分</text>
+    <text class="t22">得分:<text class="score"> 5 </text>分</text>  
+  </view>
+
+  <!-- <view class="celeline">
+    <image class="celeimg1" src="https://667a-fzuanswersystem-7g3gmzjw761ecfdb-1305763704.tcb.qcloud.la/%E5%BA%86%E7%A5%9D.png?sign=ff98625a3e78d31b3881df25dfd40977&t=1627282202"></image>
+    <text class="t2">继续努力！</text>
+    <image class="celeimg2" src="https://667a-fzuanswersystem-7g3gmzjw761ecfdb-1305763704.tcb.qcloud.la/%E5%BA%86%E7%A5%9D.png?sign=ff98625a3e78d31b3881df25dfd40977&t=1627282202"></image>  
+  </view> -->
+  <div class="saying">书山有路勤为径，学海无涯苦作舟。</div>
+  <view class="wrongBlock">
+    <view class="wtitle">
+      <text class="t3">错题报告</text>
+      <image class="wimg" src="https://667a-fzuanswersystem-7g3gmzjw761ecfdb-1305763704.tcb.qcloud.la/%E9%94%99%E9%A2%98.png?sign=9b0d9ca3e8ffbe8c1fbee09c7ec7f6e4&t=1627280071" />
+    </view>
+
+    <text wx:if="{{easyw}}" class="allwq">等级易错题数：{{easyw}}</text>
+    <text wx:if="{{mediumw}}" class="allwq">等级中错题数：{{mediumw}}</text>
+    <text wx:if="{{hardw}}" class="allwq">等级难错题数：{{hardw}}</text>
+  </view>
+
   <view class="line"></view>
-  <text class="t1">{{unit}}</text>
-  <text class="t2">总分：8分</text>
-  <text class="t22">得分:<text class="score"> 5 </text>分</text>
-  <view class="line"></view>
-  <text class="t3">错题</text>
-  <text wx:if="{{easyw}}" class="t4">易：{{easyw}}</text>
-  <text wx:if="{{mediumw}}" class="t4">中：{{mediumw}}</text>
-  <text wx:if="{{hardw}}" class="t4">难：{{hardw}}</text>
+
 
 </view>
 <view class="bottom">
-  <view class="b1">再试一次</view>
+  <view class="b1" bindtap="jmpToAn">再试一次</view>
   <view class="b1">排行榜</view>
   <view class="b1" bindtap="jmpToRecord">错题本</view>
 </view>

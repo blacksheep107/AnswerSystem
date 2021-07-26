@@ -24,6 +24,9 @@
     <view bindtap="getUserProfile" class="pk">
       <text class="text">好友PK</text>
     </view>
+    <view bindtap="naviToPk4" class="pk4">
+      <text class="text">4人PK</text>
+    </view>
     <view bindtap="naviToRecord" class="b2">
       <text class="text">答题记录</text>
     </view>
@@ -32,7 +35,7 @@
         <image class="rank" src="https://667a-fzuanswersystem-7g3gmzjw761ecfdb-1305763704.tcb.qcloud.la/%E6%8E%92%E8%A1%8C%E6%A6%9C.png?sign=f16074a38416611cfc6f2f6cf4357e49&t=1624682348" />     
         <text>排行榜</text> 
       </div>
-      <div class="rankb">
+      <div class="rankb" bindtap="naviToFeedback">
         <image class="rank" src="https://667a-fzuanswersystem-7g3gmzjw761ecfdb-1305763704.tcb.qcloud.la/%E5%B7%A5%E5%8D%95%E5%8F%8D%E9%A6%88%20(1).png?sign=e8aa4232b005de0a0a9d3f46f9a27d08&t=1624683046" />     
         <text>反馈</text>
       </div>      
