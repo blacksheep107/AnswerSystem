@@ -1,25 +1,25 @@
 <!--miniprogram/pages/pkprepare/pkprepare.wxml-->
 
 <view class="index">
-  <view class="index2">
-    <view class="left">
-      <image class="leftavatar" src="{{leftdata.avatarUrl}}"></image>
-      <text class="lefttext">{{leftdata.nickName}}</text>
-    </view>
-    <view class="right">
-      <image class="rightavatar" src="{{rightdata.avatarUrl}}"></image>
-      <text class="righttext">{{rightdata.nickName}}</text>
-    </view>
+  <view class="userdatas">
+      <view class="userscore" wx:for="{{userdata}}">
+        <view class="u1">
+          <image class="avatar" src="{{item.avatarUrl}}"></image>
+          <text class="nickName">{{item.nickName}}</text>        
+        </view>
+      </view>
+  </view>
+  <view hidden="{{vstexthidden}}">
+    <view class="vstext">匹配成功！</view>
+    <view class="vstext">等待房主开始比赛</view>  
   </view>
   <view>
-    <button hidden="{{sbuttonhide}}" open-type="share" class="btn-11">分享给好友</button>
-    <button hidden="{{pbuttonishide}}" bindtap="getUserProfile" class="btn-11">准备</button>
+    <!-- <button hidden="{{sbuttonhide}}" open-type="share" class="btn-11">分享给好友</button>
+    <button hidden="{{pbuttonishide}}" bindtap="getUserProfile" class="btn-11">准备</button> -->
     <button hidden="{{ownerbegin}}" bindtap="beginpk" class="btn-11">开始PK</button>      
   </view>
 </view>
 <view class="back">
   <view class="allblue"></view>
-  <!-- <view class="blue"></view>
-  <view class="pink"></view>   -->
 </view>
 

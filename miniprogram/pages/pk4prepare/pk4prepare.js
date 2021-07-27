@@ -17,14 +17,7 @@ Page({
     ownerbegin:'hidden',
     roomid:'',
     userdata:[],  // 展示信息
-    // leftdata:{
-    //   avatarUrl:'',
-    //   nickName:'',
-    // },
-    // rightdata:{
-    //   avatarUrl:'',
-    //   nickName:'',
-    // },
+    vstexthidden:'hidden',
   },
   beginpk(){
     // 开始
@@ -42,6 +35,27 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    roomid=options.roomid;
+    // 获取左用户头像昵称
+    pk.doc(options.roomid).get({
+      success:res=>{
+        this.setData({
+          userdata:res.data.userdata,
+          ownerid:res.data.ownerid
+        });
+        console.log(this.data.userdata)
+      }
+    });
+    if(options.gametype=='invite'){
+      // 获取新用户信息
+      this.setData({
+        pbuttonishide:''
+      });
+    }else{
+      this.setData({
+        sbuttonhide:''
+      });
+    }
     new Promise(resolve=>{
       wx.cloud.callFunction({
         name:'login',
@@ -72,7 +86,7 @@ Page({
             }
           }else if(snapshot.docChanges[0].dataType=='update'&&snapshot.docChanges[0].updatedFields.status=='pk'){
             wx.navigateTo({
-              url: '../pk/pk?roomid='+roomid,
+              url: '../pk4/pk4?roomid='+roomid,
             });
           }
         },
@@ -80,31 +94,7 @@ Page({
           console.error(err);
         }
       })
-    )
-    roomid=options.roomid;
-    this.setData({
-      roomid:options.roomid,
-    });
-    // 获取左用户头像昵称
-    pk.doc(options.roomid).get({
-      success:res=>{
-        console.log(res);
-        this.setData({
-          ownerid:res.data.ownerid,
-          leftdata:res.data.leftdata,
-        });
-      }
-    });
-    if(options.gametype=='invite'){
-      // 获取新用户信息
-      this.setData({
-        pbuttonishide:''
-      });
-    }else{
-      this.setData({
-        sbuttonhide:''
-      });
-    }
+    );
   },
   onUnload:function(){
     // 用户退出，删除房间

@@ -75,7 +75,16 @@ Page({
               success:res=>{
                 console.log(res);
               }
-            })
+            });
+            wx.cloud.callFunction({
+              name:'removeAllPk4',
+              data:{
+                openid:app.globalData.openid
+              },
+              success:res=>{
+                console.log(res);
+              },
+            });
           }
         });
       });
@@ -100,15 +109,19 @@ Page({
   },
   createRoom4(){
     console.log(app.globalData.pkquestions);
+    let item={
+      avatarUrl:app.globalData.userInfo.avatarUrl,
+      nickName:app.globalData.userInfo.nickName,
+      openid:app.globalData.openid,
+      point:0,
+    }
+    let p=[];
+    for(let i=0;i<4;i++)  p.push(item);
     pk4.add({
       data:{
         ownerid:app.globalData.openid,
         status:'prepare',
-        data1:{
-          avatarUrl:app.globalData.userInfo.avatarUrl,
-          nickName:app.globalData.userInfo.nickName,
-          openid:app.globalData.openid,
-        },
+        userdata:p,
         questions:app.globalData.pkquestions,
         finish:0,
       },

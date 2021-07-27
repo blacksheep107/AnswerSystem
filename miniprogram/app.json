@@ -9,7 +9,8 @@
     "pages/questions/questions",
     "pages/finishscore/finishscore",
     "pages/feedback/feedback",
-    "pages/pk4prepare/pk4prepare"
+    "pages/pk4prepare/pk4prepare",
+    "pages/pk4/pk4"
   ],
   "window": {
     "backgroundColor": "#FFFFFF",

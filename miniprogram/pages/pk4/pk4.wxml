@@ -1,0 +1,52 @@
+<!--miniprogram/pages/pk/pk.wxml-->
+<loading hidden="{{loadhidden}}">结算中</loading>
+<view class="index">
+  <view class="header">
+    <view class="index1">
+    <!-- personal point -->
+      <view class="onescore">
+        <image class="avatar" src="{{avatarUrl}}"></image>
+        <text class="nickName">{{nickName}}</text>
+      </view>
+      <text class="mypoint">{{userdata[indexInUserdata].point}}</text>
+    </view>
+    <view class="index2">
+    <!-- point -->
+    <view class="onescore" wx:for="{{userdata}}">
+      <image class="avatar" src="{{item.avatarUrl}}"></image>
+      <text class="nickName">{{item.nickName}}</text>
+      <text>{{item.point}}分</text>
+    </view>
+    </view>  
+  </view>
+  <view class="questions" hidden="{{isover}}">
+    <view class="question">
+      <text>{{questions[count].content}}</text>
+      <image wx:if="{{questions[count].pictures}}" src="{{questions[count].pictures}}" />
+    </view>
+    <view class="answer">
+      <view wx:for="{{questions[count].choosecontent}}" class="chooseone" style="background:{{item.value==answer?background:''}};color:{{item.value==answer?fontcolor:''}}">
+        <view bindtap="{{canIAnswer}}" data-value='{{item.value}}'>
+          <text>{{item.content}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+<view class="back">
+  <view class="allblue"></view>
+</view>
+
+<view class="cover" hidden="{{coverhidden}}"></view>
+
+<image src="draw.png" hidden="{{draw}}" class="draw"></image>
+<view class="winner" hidden="{{winnerhidden}}">
+  <image class="winner" hidden="{{winnerhidden}}" src="https://667a-fzuanswersystem-7g3gmzjw761ecfdb-1305763704.tcb.qcloud.la/%E5%A5%96%E6%9D%AF.png?sign=7d10026399a7dccf8a9a92d0dd39fd10&t=1626311532" />
+  <text>WINNER</text>
+</view>
+<view class="loser" hidden="{{loserhidden}}">
+  <image hidden="{{loserhidden}}" class="limg" src="https://667a-fzuanswersystem-7g3gmzjw761ecfdb-1305763704.tcb.qcloud.la/%E5%A4%B1%E8%B4%A5.png?sign=620f451f6f54ef91c8a99e28eb323210&t=1626311555" />
+  <text>LOSE</text>
+</view>
+
+<view class="floatCount" hidden="{{counthidden}}">第 {{count+1}} 题</view>
