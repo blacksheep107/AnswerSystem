@@ -85,6 +85,7 @@ Page({
               });
             }
           }else if(snapshot.docChanges[0].dataType=='update'&&snapshot.docChanges[0].updatedFields.status=='pk'){
+            watchpk.close();
             wx.navigateTo({
               url: '../pk4/pk4?roomid='+roomid,
             });

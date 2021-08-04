@@ -10,7 +10,8 @@
     "pages/finishscore/finishscore",
     "pages/feedback/feedback",
     "pages/pk4prepare/pk4prepare",
-    "pages/pk4/pk4"
+    "pages/pk4/pk4",
+    "pages/pkrankpage/pkrankpage"
   ],
   "window": {
     "backgroundColor": "#FFFFFF",

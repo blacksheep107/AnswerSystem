@@ -39,7 +39,7 @@
 
 <view class="cover" hidden="{{coverhidden}}"></view>
 
-<image src="draw.png" hidden="{{draw}}" class="draw"></image>
+<!-- <image src="draw.png" hidden="{{draw}}" class="draw"></image>
 <view class="winner" hidden="{{winnerhidden}}">
   <image class="winner" hidden="{{winnerhidden}}" src="https://667a-fzuanswersystem-7g3gmzjw761ecfdb-1305763704.tcb.qcloud.la/%E5%A5%96%E6%9D%AF.png?sign=7d10026399a7dccf8a9a92d0dd39fd10&t=1626311532" />
   <text>WINNER</text>
@@ -47,6 +47,6 @@
 <view class="loser" hidden="{{loserhidden}}">
   <image hidden="{{loserhidden}}" class="limg" src="https://667a-fzuanswersystem-7g3gmzjw761ecfdb-1305763704.tcb.qcloud.la/%E5%A4%B1%E8%B4%A5.png?sign=620f451f6f54ef91c8a99e28eb323210&t=1626311555" />
   <text>LOSE</text>
-</view>
+</view> -->
 
 <view class="floatCount" hidden="{{counthidden}}">第 {{count+1}} 题</view>

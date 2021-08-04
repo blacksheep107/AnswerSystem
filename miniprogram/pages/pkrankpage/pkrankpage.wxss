@@ -1,0 +1,63 @@
+/* miniprogram/pages/pkrankpage/pkrankpage.wxss */
+page{
+  background-color: #d8e3e7;
+  background-repeat: no-repeat;
+}
+.fourScores{
+  display: flex;
+  flex-direction: column;
+  padding: 0 40rpx;
+  background: white;
+  margin: 0 16px;
+  border-radius: 16rpx;
+}
+.back{
+  z-index: -1000;
+  position: absolute;
+}
+.allblue{
+  width: 100%;
+  height: -webkit-fill-available;
+  position: fixed;
+  background-image: linear-gradient(#78c4d4, #9198e5);
+}
+.student{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  place-content: space-evenly;
+  padding: 20rpx;
+  font-size: 34rpx;
+}
+.avatar{
+  border-radius: 50%;
+  width: 80rpx;
+  height: 80rpx;
+}
+.line{
+  height: 1px;
+  background: #c0c0c0;
+  width: -webkit-fill-available;
+}
+.isme{
+  z-index: 999;
+  position: absolute;
+  height: 70rpx;
+  width: 70rpx;
+  left: 70rpx;
+}
+.bottom{
+  margin-top: 40rpx 20rpx;
+  display: flex;
+  flex-direction: row;
+}
+.pkbtn{
+  background: #4961e7;
+  border-radius: 60rpx;
+  color: white;
+}
+.shabtn{
+  background: #f85656;
+  border-radius: 60rpx;
+  color: white;
+}

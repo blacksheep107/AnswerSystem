@@ -37,72 +37,46 @@ Page({
       canIAnswer:'',  // 取消监听函数，防止重复答题
     });
     if(answer==this.data.questions[this.data.count].answer){
-      // 对，分数变化双方都要看到
-      if(this.data.ownerid==app.globalData.openid){
-        // 房主,left
-        pk.doc(this.data.roomid).update({
-          data:{
-            leftpoint:_.inc(addPoint),
-          },
-          success:res=>{
-            this.setData({
-              leftisTrue:'', // 显示正确
-              background:'#4BC356',
-              fontcolor:'white',
-            });
-          }
-        })
-      }else{
-        pk.doc(this.data.roomid).update({
-          data:{
-            rightpoint:_.inc(addPoint),
-          },
-          success:res=>{
-            this.setData({
-              rightisTrue:'', // 显示正确
-              background:'#4BC356',
-              fontcolor:'white',
-            });
-          }
-        })
-      }
+      // 答对，分数变化直接更新到数据库
+      // 先更新本地，答对加10分
+      this.data.userdata[this.data.indexInUserdata].point+=10;
+      this.setData({
+        background:'#4BC356',
+        fontcolor:'white',
+      });
+      pk.doc(this.data.roomid).update({
+        data:{
+          userdata:this.data.userdata
+        },
+        success:res=>{
+          // 更新后
+          // console.log(res,'userdata');
+        }
+      })
     }else{
-      // 错
-      if(answer==this.data.questions[this.data.count].answer){
-        this.setData({
-          leftisFalse:'',
-          background:'#BB5242',
-          color:'white',
-        });
-      }else{
-        this.setData({
-          rightisFalse:'',
-          background:'#BB5242',
-          color:'white',
-        });
-      }
+      // 答错不用更新分数
+      this.setData({
+        background:'#BB5242',
+        color:'white',
+      });
     }
     var that=this;
     if(this.data.count==this.data.questions.length-1){
+      // 答完最后一题
+      // 所有请求都没有做错误处理，可用性--
+      // finish：结束答题的人数
       var that=this;
       pk.doc(this.data.roomid).update({
         data:{
           finish:_.inc(1)
-        },
-        success:res=>{
-          console.log(res);
         }
       })
       setTimeout(function(){
         that.setData({
-          rightisTrue:'hidden',
-          rightisFalse:'hidden',
-          leftisFalse:'hidden',
-          leftisTrue:'hidden',
           count:that.data.count+1,
           answer:'',
           background:'',
-          loadhidden:'hidden',
+          loadhidden:'',
           isover:'hidden',
         });
       },2000);
@@ -110,10 +84,6 @@ Page({
     var that=this;
     setTimeout(function(){
       that.setData({
-        rightisTrue:'hidden',
-        rightisFalse:'hidden',
-        leftisFalse:'hidden',
-        leftisTrue:'hidden',
         count:that.data.count+1,
         answer:'',
         background:'',
@@ -140,15 +110,11 @@ Page({
       loadhidden:'hidden',
       isover:'hidden',
     });
-    let leftpoint=this.data.leftpoint;
-    let rightpoint=this.data.rightpoint;
-    if(leftpoint>rightpoint){
-      this.showLeftWin();
-    }else if(leftpoint<rightpoint){
-      this.showRightWin();
-    }else{
-      this.showDraw();
-    }    
+    // 跳转到排行榜
+    watchpoint.close();
+    wx.navigateTo({
+      url: '../pkrankpage/pkrankpage?roomid='+this.data.roomid,
+    });
   },
   showLeftWin(){
     // 房主赢
@@ -231,33 +197,21 @@ Page({
       onChange:snapshot=>{
         let updatestr=snapshot.docChanges[0].updatedFields;
         console.log(snapshot);
-        Object.keys(updatestr).forEach(item=>{
-          let index=parseInt(item[9]);
-          let p=updatestr[item];
-          this.data.userdata[index].point=p;
-          this.setData({
-            userdata:this.data.userdata
-          });
-          console.log(this.data.userdata);
-        })
-        if(snapshot.docChanges[0].dataType=='update'&&snapshot.docChanges[0].updatedFields.leftpoint!==undefined){
-          this.setData({
-            leftpoint:snapshot.docChanges[0].updatedFields.leftpoint
-          });
+        if(updatestr){
+          // 更新分数
+          if(updatestr.userdata){
+            this.setData({
+              userdata:updatestr.userdata
+            });  
+          }else if(updatestr.finish==4){
+            // 4人结束答题
+            this.calPoints();
+          }
         }
-        if(snapshot.docChanges[0].dataType=='update'&&snapshot.docChanges[0].updatedFields.leftpoint!==undefined){
-          this.setData({
-            leftpoint:snapshot.docChanges[0].updatedFields.leftpoint
-          });
-        }
-        if(snapshot.docChanges[0].dataType=='update'&&snapshot.docChanges[0].updatedFields.rightpoint!==undefined){
-          this.setData({
-            rightpoint:snapshot.docChanges[0].updatedFields.rightpoint
-          });
-        }
-        if(snapshot.docChanges[0].dataType=='update'&&snapshot.docChanges[0].updatedFields.finish==2){
-          this.calPoints();
-        }
+        // if(snapshot.docChanges[0].dataType=='update'&&snapshot.docChanges[0].updatedFields.finish==2){
+        //   // 结算
+        //   this.calPoints();
+        // }
       },
       onError:err=>{
         console.error(err);

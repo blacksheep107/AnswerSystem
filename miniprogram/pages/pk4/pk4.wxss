@@ -22,7 +22,7 @@
   width: 300rpx;
 }
 .mypoint{
-  font-size: 80rpx;
+  font-size: 100rpx;
   font-weight: 900;
   color: green;
 }
@@ -42,7 +42,7 @@
   padding: 20rpx;
   font-size: large;
   word-break: break-all;
-  top: 260rpx;
+  top: 300rpx;
   font-size: large;
   position: absolute;
   color: black;
@@ -199,4 +199,9 @@
 }
 .header{
   display: flex;
+  flex-direction: row;
+  background: rgba(53,123,165,0.3);
+  padding: 20rpx;
+  margin: 0 30rpx;
+  border-radius: 20rpx;
 }

@@ -1,0 +1,8 @@
+{
+  "usingComponents": {},
+  "backgroundColor": "#d8e3e7",
+  "backgroundTextStyle": "dark",
+  "navigationBarBackgroundColor": "#d8e3e7",
+  "navigationBarTitleText": "4人PK排行榜",
+  "navigationBarTextStyle": "black"
+}

@@ -1,0 +1,22 @@
+<!--miniprogram/pages/pkrankpage/pkrankpage.wxml-->
+<view>
+  <view class="fourScores">
+    <view style="display:flex; flex-direction:column; " wx:for="{{fourData}}">
+      <view class="student" style="{{maxindex==index?winnerback:otherback}}">
+        <text>{{index+1}}</text>
+        <image wx:if="index==meindex" src="https://667a-fzuanswersystem-7g3gmzjw761ecfdb-1305763704.tcb.qcloud.la/%E6%88%91.png?sign=79cf1381d8cc94f0711e8553b3e8cb3a&t=1628069179" class="isme"></image>
+        <image src="{{item.avatarUrl}}" class="avatar"></image>
+        <text class="nickName">{{item.nickName}}</text>
+        <text class="point">{{item.point}}分</text>    
+      </view>
+      <div wx:if="{{index<3}}" class="line"></div>
+    </view>
+  </view>
+  <view class="bottom">
+    <button class="pkbtn">再次挑战</button>
+    <button class="shabtn">我要分享</button>
+  </view>
+</view>
+<view class="back">
+  <view class="allblue"></view>
+</view>
