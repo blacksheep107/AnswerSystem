@@ -24,11 +24,12 @@ Page({
     pk.doc(this.data.roomid).update({
       data:{
         status:'pk',
-        point1:0,
-        point2:0,
-        point3:0,
-        point4:0,
+        userdata:this.data.userdata
       },
+      success:res=>{
+        console.log(res);
+        
+      }
     })
   },
   /**

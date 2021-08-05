@@ -25,7 +25,7 @@ Page({
     this.data.roomid=options.roomid;
     pk.doc(options.roomid).get().then(res=>{
       let d=res.data.userdata.sort(function(a,b){
-        return a.point-b.point;
+        return b.point-a.point;
       });
       this.setData({
         fourData:d

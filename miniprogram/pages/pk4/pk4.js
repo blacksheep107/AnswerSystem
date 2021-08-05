@@ -196,7 +196,8 @@ Page({
     watchpoint=pk.doc(options.roomid).watch({
       onChange:snapshot=>{
         let updatestr=snapshot.docChanges[0].updatedFields;
-        console.log(snapshot);
+        // console.log(snapshot);
+        console.log(updatestr);
         if(updatestr){
           // 更新分数
           if(updatestr.userdata){
@@ -206,7 +207,19 @@ Page({
           }else if(updatestr.finish==4){
             // 4人结束答题
             this.calPoints();
+          }else{
+            // 直接写数据库 key是userdata.1.point
+            pk.doc(this.data.roomid).get().then(res=>{
+              this.setData({
+                userdata:res.data.userdata
+              });
+            });
           }
+          // let key=Object.keys(updatestr)[0];
+          // console.log(key);
+          // if(key.slice(0,8)=='userdata'){
+          //   console.log(updatestr[key]);
+          // }
         }
         // if(snapshot.docChanges[0].dataType=='update'&&snapshot.docChanges[0].updatedFields.finish==2){
         //   // 结算

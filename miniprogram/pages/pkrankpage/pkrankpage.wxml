@@ -1,5 +1,8 @@
 <!--miniprogram/pages/pkrankpage/pkrankpage.wxml-->
 <view>
+  <view class="ranktitle">
+    <image src="https://667a-fzuanswersystem-7g3gmzjw761ecfdb-1305763704.tcb.qcloud.la/rankTitle.png?sign=aa6ac152bd7391cfa3ab0e3591aed779&t=1628126827"></image>
+  </view>
   <view class="fourScores">
     <view style="display:flex; flex-direction:column; " wx:for="{{fourData}}">
       <view class="student" style="{{maxindex==index?winnerback:otherback}}">
