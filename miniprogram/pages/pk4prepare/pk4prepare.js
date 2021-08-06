@@ -20,24 +20,33 @@ Page({
     vstexthidden:'hidden',
   },
   beginpk(){
-    // 开始
-    pk.doc(this.data.roomid).update({
-      data:{
-        status:'pk',
-        userdata:this.data.userdata
-      },
-      success:res=>{
-        console.log(res);
-        
+    pk.doc(this.data.roomid).get().then(res=>{
+      console.log(res,'满人');
+      if(res.data.userdata.length==4){
+        pk.doc(this.data.roomid).update({
+          data:{
+            status:'pk',
+            // userdata:this.data.userdata
+          },
+          success:res=>{
+            console.log(res);
+          }
+        })        
+      }else{
+        wx.showModal({
+          title:'提示',
+          content:'未满4人，无法开始比赛！',
+          showCancel:false,
+        });
       }
     })
+
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
     roomid=options.roomid;
-    // 获取左用户头像昵称
     pk.doc(options.roomid).get({
       success:res=>{
         this.setData({
@@ -45,58 +54,48 @@ Page({
           ownerid:res.data.ownerid
         });
         console.log(this.data.userdata)
+        if(this.data.ownerid==app.globalData.openid){
+          this.setData({
+            ownerbegin:'',
+          });
+        }
       }
     });
-    if(options.gametype=='invite'){
-      // 获取新用户信息
-      this.setData({
-        pbuttonishide:''
-      });
-    }else{
-      this.setData({
-        sbuttonhide:''
-      });
-    }
-    new Promise(resolve=>{
-      wx.cloud.callFunction({
-        name:'login',
-        data:{},
-        success:res=>{
-          app.globalData.openid = res.result.OPENID;
-          resolve();
-        }
-      })
-    }).then(
-      watchpk=pk.doc(options.roomid).watch({
-        onChange:snapshot=>{
-          console.log(snapshot);
-          console.log(snapshot.docChanges[0].updatedFields);
-          if(snapshot.docChanges[0].dataType=='update'&&snapshot.docChanges[0].updatedFields['rightdata.avatarUrl']!==undefined){
-            this.setData({
-              rightdata:{
-                avatarUrl:snapshot.docChanges[0].updatedFields['rightdata.avatarUrl'],
-                nickName:snapshot.docChanges[0].updatedFields['rightdata.nickName'],
-                openid:app.globalData.openid,
-              },
-              sbuttonhide:'hidden',
-            });
-            if(this.data.ownerid==app.globalData.openid){
+    watchpk=pk.doc(options.roomid).watch({
+      onChange:snapshot=>{
+        console.log(snapshot);
+        let updatestr=snapshot.docChanges[0].updatedFields;
+        console.log(updatestr);
+        
+        if(snapshot.docChanges[0].dataType=='update'&&updatestr!=undefined){
+          let str=Object.keys(updatestr);
+          if(str[0].slice(0,8)=='userdata'){
+            if(str[0]=='userdata'){
               this.setData({
-                ownerbegin:'',
+                userdata:updatestr['userdata']
               });
+            }else{
+              // 当别人进入房间的时候会监听到，测试困难
+              // 查询拿到最新的userdata
+              pk.doc(this.data.roomid).get().then(res=>{
+                console.log(res);
+                this.setData({
+                  userdata:res.data.userdata
+                });
+              })
             }
-          }else if(snapshot.docChanges[0].dataType=='update'&&snapshot.docChanges[0].updatedFields.status=='pk'){
-            watchpk.close();
-            wx.navigateTo({
-              url: '../pk4/pk4?roomid='+roomid,
-            });
           }
-        },
-        onError:err=>{
-          console.error(err);
+        }else if(snapshot.docChanges[0].dataType=='update'&&snapshot.docChanges[0].updatedFields.status=='pk'){
+          watchpk.close();
+          wx.navigateTo({
+            url: '../pk4/pk4?roomid='+roomid,
+          });
         }
-      })
-    );
+      },
+      onError:err=>{
+        console.error(err);
+      }
+    })
   },
   onUnload:function(){
     // 用户退出，删除房间

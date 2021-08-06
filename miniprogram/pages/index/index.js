@@ -98,12 +98,62 @@ Page({
     wx.getUserProfile({
       desc: '展示用户信息', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
       success: (res) => {
-        console.log(res);
         app.globalData.userInfo=res.userInfo;
-        this.getRandomQuestions().then(()=>{
-          console.log(app.globalData.pkquestions);
-          this.createRoom4();
-        });
+        // 是否建房
+        pk4.where({
+          status:'prepare',
+        }).get().then(res=>{
+          console.log(res);
+          if(res.data.length==0){
+            // 建房
+            this.getRandomQuestions().then(()=>{
+              console.log(app.globalData.pkquestions);
+              this.createRoom4();
+            });
+          }else{
+            // 加入
+            let newuserdata,id,openid,flag=0;
+            for(let i=0;i<res.data.length;i++){
+              if(res.data[i].userdata.length==4)  continue;
+              else{
+                newuserdata=res.data[i].userdata;
+                id=res.data[i]._id;
+                openid=res.data[i]._openid;
+                flag=1;
+                break;
+              }
+            }
+            if(!flag){
+              // 都满员
+              this.getRandomQuestions().then(()=>{
+                console.log(app.globalData.pkquestions);
+                this.createRoom4();
+              });
+            }else{
+              let item={
+                avatarUrl:app.globalData.userInfo.avatarUrl,
+                nickName:app.globalData.userInfo.nickName,
+                openid:app.globalData.openid,
+                point:0,
+              }
+              newuserdata.push(item);
+              pk4.doc(id).update({
+                data:{
+                  userdata:newuserdata,
+                },
+                success:res=>{
+                  console.log(res);
+                  // 更新userdata，进入房间
+                  wx.navigateTo({
+                    url: '../pk4prepare/pk4prepare?ownerid='+openid+'&&roomid='+id+'&&gametype=invite',
+                  });
+                }
+              })              
+            }
+
+          }
+        })
+
       }
     })
   },
@@ -116,7 +166,7 @@ Page({
       point:0,
     }
     let p=[];
-    for(let i=0;i<4;i++)  p.push(item);
+    p.push(item);
     pk4.add({
       data:{
         ownerid:app.globalData.openid,
