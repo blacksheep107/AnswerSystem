@@ -20,6 +20,7 @@ Page({
     vstexthidden:'hidden',
   },
   beginpk(){
+    console.log(this.data.roomid);
     pk.doc(this.data.roomid).get().then(res=>{
       console.log(res,'满人');
       if(res.data.userdata.length==4){
@@ -46,7 +47,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    roomid=options.roomid;
+    this.data.roomid=options.roomid;
     pk.doc(options.roomid).get({
       success:res=>{
         this.setData({
@@ -85,10 +86,12 @@ Page({
               })
             }
           }
-        }else if(snapshot.docChanges[0].dataType=='update'&&snapshot.docChanges[0].updatedFields.status=='pk'){
+        }
+        if(snapshot.docChanges[0].dataType=='update'&&updatestr.status=='pk'){
+          console.log(111);
           watchpk.close();
           wx.navigateTo({
-            url: '../pk4/pk4?roomid='+roomid,
+            url: '../pk4/pk4?roomid='+this.data.roomid,
           });
         }
       },

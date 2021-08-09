@@ -16,8 +16,8 @@
     </view>
   </view>
   <view class="bottom">
-    <button class="pkbtn">再次挑战</button>
-    <button class="shabtn">我要分享</button>
+    <button class="pkbtn" bindtap="naviToIndex">回到首页</button>
+    <button class="shabtn" bindtap="share">我要分享</button>
   </view>
 </view>
 <view class="back">

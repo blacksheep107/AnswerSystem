@@ -153,7 +153,6 @@ Page({
 
           }
         })
-
       }
     })
   },
@@ -257,7 +256,7 @@ Page({
   },
   naviTofriendPK(){
     this.getRandomQuestions().then(()=>{
-      console.log(app.globalData.pkquestions);
+      // console.log(app.globalData.pkquestions);
       this.createRoom();
     });
   },
