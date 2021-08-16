@@ -107,7 +107,6 @@ Page({
           if(res.data.length==0){
             // 建房
             this.getRandomQuestions().then(()=>{
-              console.log(app.globalData.pkquestions);
               this.createRoom4();
             });
           }else{
@@ -126,7 +125,6 @@ Page({
             if(!flag){
               // 都满员
               this.getRandomQuestions().then(()=>{
-                console.log(app.globalData.pkquestions);
                 this.createRoom4();
               });
             }else{
@@ -226,6 +224,7 @@ Page({
     })
   },
   getRandomQuestions(){
+    app.globalData.pkquestions=[];
     return new Promise((resolve)=>{
       this.getQuestions().then(()=>{
         // 5题

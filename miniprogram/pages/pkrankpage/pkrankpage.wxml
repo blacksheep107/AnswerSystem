@@ -17,7 +17,7 @@
   </view>
   <view class="bottom">
     <button class="pkbtn" bindtap="naviToIndex">回到首页</button>
-    <button class="shabtn" bindtap="share">我要分享</button>
+    <button class="shabtn" open-type="share">我要分享</button>
   </view>
 </view>
 <view class="back">

@@ -45,11 +45,6 @@ Page({
       url: '../index/index',
     })
   },
-  share(){
-    wx.showModal({
-      title:'开发中！',
-    })
-  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -95,7 +90,18 @@ Page({
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
-
+  onShareAppMessage: function (res) {
+    console.log(res.target.dataset.info);
+    return {
+      title: '分享',
+      path: '/pages/index/index',
+      success:res=>{
+        wx.showToast({
+          title: '分享成功',
+          icon: 'success',
+          duration: 2000
+        })
+      }
+    }
   }
 })
