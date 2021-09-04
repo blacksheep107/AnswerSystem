@@ -55,9 +55,15 @@ Page({
     return new Promise(reso=>{
       this.getClassInfo().then((res)=>{
         let homework=res.data[0].homework;  // 所有单元
+        let arr=Object.keys(res.data[0].homework).map(item=>{
+          return Object.assign(res.data[0].homework[item], {name:item});
+        });
+        arr.sort(function(a,b){
+          return a.index-b.index;
+        })
         this.setData({
           homework:homework,
-          allUnits:Object.keys(homework),
+          allUnits:arr,
           loadhidden:'hidden',
           allhihdden:'',
         });
@@ -65,18 +71,18 @@ Page({
           success:res=>{
             let score=res.data.score;
             for(let i=0;i<this.data.allUnits.length;i++){
-              if(score[this.data.allUnits[i]]==undefined){  //新单元
-                score[this.data.allUnits[i]]={
+              if(score[this.data.allUnits[i].name]==undefined){  //新单元
+                score[this.data.allUnits[i].name]={
                   score:0,
-                  chance:this.data.homework[this.data.allUnits[i]].chance
+                  chance:this.data.homework[this.data.allUnits[i].name].chance
                 };
-                this.data.chance[this.data.allUnits[i]]=this.data.homework[this.data.allUnits[i]].chance;
+                this.data.chance[this.data.allUnits[i].name]=this.data.homework[this.data.allUnits[i].name].chance;
               }else{
-                score[this.data.allUnits[i]]={
-                  score:res.data.score[this.data.allUnits[i]].score,
-                  chance:res.data.score[this.data.allUnits[i]].chance,
+                score[this.data.allUnits[i].name]={
+                  score:res.data.score[this.data.allUnits[i].name].score,
+                  chance:res.data.score[this.data.allUnits[i].name].chance,
                 };
-                this.data.chance[this.data.allUnits[i]]=res.data.score[this.data.allUnits[i]].chance;
+                this.data.chance[this.data.allUnits[i].name]=res.data.score[this.data.allUnits[i].name].chance;
               }
             }
             console.log(score);

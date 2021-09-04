@@ -25,7 +25,6 @@ Page({
     canIUseGetUserProfile: false,
     canIUseOpenData: wx.canIUse('open-data.type.userAvatarUrl') // 如需尝试获取用户信息可改为false
   },
-
   onShow: function() {
       this.onGetOpenid().then(()=>{
         users.where({
