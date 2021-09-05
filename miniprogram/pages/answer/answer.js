@@ -101,9 +101,9 @@ Page({
   },
   getQuestion(e){
     let unitid=e.currentTarget.dataset.item;
-    console.log(this.data.homework[unitid]);
-    let qlist=this.data.homework[unitid];
-    if(this.data.chance[unitid]<=0){
+    console.log(this.data.homework[unitid.name]);
+    let qlist=this.data.homework[unitid.name];
+    if(this.data.chance[unitid.name]<=0){
       wx.showModal({
         title:'提示',
         content:'你的答题机会已用完！',
@@ -111,7 +111,7 @@ Page({
       });
     }else{
       wx.navigateTo({
-        url: '../questions/questions?list='+qlist.questions+'&&unitname='+unitid+'&&chance='+this.data.chance[unitid],
+        url: '../questions/questions?list='+qlist.questions+'&&unitname='+unitid.name+'&&chance='+this.data.chance[unitid.name],
       });      
     }
   },

@@ -4,8 +4,8 @@
     <text class="t5">{{name}} {{studentid}}</text> 
     <view class="line"></view>
     <text class="t1">{{unit}}</text>
-    <text class="t2">总分：8分</text>
-    <text class="t22">得分:<text class="score"> 5 </text>分</text>  
+    <text class="t2">总分：-分</text>
+    <text class="t22">得分:<text class="score"> - </text>分</text>  
   </view>
 
   <!-- <view class="celeline">
